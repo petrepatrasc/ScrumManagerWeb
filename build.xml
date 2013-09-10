@@ -6,7 +6,7 @@
     <target name="doctrine-migrate" description="Run Doctrine migrations">
         <exec executable="php">
             <arg path="${basedir}/app/console" />
-            <arg value="doctrine:migrate:migrate" />
+            <arg value="doctrine:migrations:migrate" />
         </exec>
     </target>
 
