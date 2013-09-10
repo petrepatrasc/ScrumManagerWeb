@@ -30,7 +30,7 @@
         </exec>
     </target>
 
-    <target name="prepare" depends="composer, dbconfig, clean" description="Prepare for build">
+    <target name="prepare" depends="composer, clean" description="Prepare for build">
         <mkdir dir="${basedir}/build/coverage" />
         <mkdir dir="${basedir}/build/logs" />
         <mkdir dir="${basedir}/build/api" />

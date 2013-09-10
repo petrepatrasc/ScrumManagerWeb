@@ -11,7 +11,88 @@ use \DateTime;
  * @ORM\Entity(repositoryClass="ScrumManager\ApiBundle\Repository\AccountRepository")
  * @ORM\Table(name="account")
  */
-class Account {
+class Account implements SerializableInterface {
+
+    /**
+     * Makes an Account entity from an array and return it.
+     * @param array $params The parameters that should be used creating the entity.
+     * @param Account $entity The entity which we should already use if we just want to update an entry with some data.
+     * @return Account The entity that was generated after loading it from the array.
+     */
+    public static function makeFromArray($params, $entity = null) {
+        if ($entity === null) {
+            $entity = new self;
+        }
+
+        if (isset($params['username'])) {
+            $entity->setUsername($params['username']);
+        }
+
+        if (isset($params['password'])) {
+            $entity->setPassword($params['password']);
+        }
+
+        if (isset($params['seed'])) {
+            $entity->setSeed($params['seed']);
+        }
+
+        if (isset($params['email'])) {
+            $entity->setEmail($params['email']);
+        }
+
+        if (isset($params['first_name'])) {
+            $entity->setFirstName($params['first_name']);
+        }
+
+        if (isset($params['last_name'])) {
+            $entity->setLastName($params['last_name']);
+        }
+
+        if (isset($params['api_key'])) {
+            $entity->setApiKey($params['api_key']);
+        }
+
+        if (isset($params['reset_token'])) {
+            $entity->setResetToken($params['reset_token']);
+        }
+
+        if (isset($params['reset_initiated_at'])) {
+            $entity->setResetInitiatedAt(new DateTime($params['reset_initiated_at']));
+        }
+
+        if (isset($params['created_at'])) {
+            $entity->setCreatedAt(new DateTime($params['created_at']));
+        }
+
+        if (isset($params['updated_at'])) {
+            $entity->setUpdatedAt(new DateTime($params['updated_at']));
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Return the entity by mapping its fields into an array.
+     * @return array Array containing the mapping of the entity.
+     */
+    public function toArray() {
+        $data = array(
+            'id' => $this->getId(),
+            'username' => $this->getUsername(),
+            'password' => $this->getPassword(),
+            'seed' => $this->getSeed(),
+            'email' => $this->getEmail(),
+            'first_name' => $this->getFirstName(),
+            'last_name' => $this->getLastName(),
+            'api_key' => $this->getApiKey(),
+            'reset_token' => $this->getResetToken(),
+            'reset_initiated_at' => $this->getResetInitiatedAt(),
+            'created_at' => $this->getCreatedAt(),
+            'updated_at' => $this->getUpdatedAt()
+        );
+
+        return $data;
+    }
 
     /**
      * Constructor for the class.
