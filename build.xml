@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="WeekendShopProject" default="build">
+    <target name="build" depends="prepare, phpunit, phpdoc, phploc, pdepend" />
+
+    <target name="dbconfig" description="Ensure that the DB has been configured">
+        <exec executable="cp">
+            <arg path="${basedir}/app/config/parameters.yml.dist" />
+            <arg path="${basedir}/app/config/parameters.yml" />
+        </exec>
+    </target>
+
+    <target name="doctrine-migrate" description="Run Doctrine migrations">
+        <exec executable="php">
+            <arg path="${basedir}/app/console" />
+            <arg value="doctrine:migrate:migrate" />
+        </exec>
+    </target>
+
+    <target name="lint" description="Make sure that our PHP syntax is correct before we start testing">
+        <apply executable="php" failonerror="true">
+            <arg value="-l" />
+
+            <fileset dir="${basedir}/app">
+                <include name="bootstrap.php" />
+            </fileset>
+
+            <fileset dir="${basedir}/src">
+                <include name="**/*.php" />
+            </fileset>
+        </apply>
+    </target>
+
+    <target name="composer" description="Update vendors">
+        <exec executable="composer">
+            <arg value="update" />
+        </exec>
+    </target>
+
+    <target name="prepare" depends="composer, dbconfig, clean" description="Prepare for build">
+        <mkdir dir="${basedir}/build/coverage" />
+        <mkdir dir="${basedir}/build/logs" />
+        <mkdir dir="${basedir}/build/api" />
+        <mkdir dir="${basedir}/build/pdepend" />
+    </target>
+
+    <target name="clean" description="Cleanup build artifacts">
+        <delete dir="${basedir}/build/coverage" />
+        <delete dir="${basedir}/build/logs" />
+        <delete dir="${basedir}/build/api" />
+        <delete dir="${basedir}/build/pdepend" />
+    </target>
+
+    <target name="phpunit" depends="doctrine-migrate" description="Run unit tests with PHPUnit">
+        <exec executable="phpunit" failonerror="true">
+            <arg value="-c" />
+            <arg path="${basedir}/app" />
+
+            <arg value="--coverage-html" />
+            <arg path="${basedir}/build/coverage" />
+
+            <arg value="--coverage-clover" />
+            <arg path="${basedir}/build/logs/clover.xml" />
+        </exec>
+    </target>
+
+    <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
+        <exec executable="phpdoc">
+            <arg value="--directory" />
+            <arg path="${basedir}/src" />
+            <arg value="--target" />
+            <arg path="${basedir}/build/api" />
+        </exec>
+    </target>
+
+    <target name="phploc" description="Measure project size using PHPLOC">
+        <exec executable="phploc">
+            <arg value="--log-csv" />
+            <arg value="${basedir}/build/logs/phploc.csv" />
+            <arg path="${basedir}/src" />
+        </exec>
+    </target>
+
+    <target name="pdepend" description="Calculate software metrics using PHP_Depend">
+        <exec executable="pdepend">
+            <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+            <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+            <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+            <arg path="${basedir}/src" />
+        </exec>
+    </target>
+</project>
