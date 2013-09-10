@@ -1,0 +1,7 @@
+parameters:
+#    scrum_manager_api.example.class: ScrumManager\ApiBundle\Example
+
+services:
+#    scrum_manager_api.example:
+#        class: %scrum_manager_api.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

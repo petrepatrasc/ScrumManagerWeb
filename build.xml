@@ -3,13 +3,6 @@
 <project name="WeekendShopProject" default="build">
     <target name="build" depends="prepare, phpunit, phpdoc, phploc, pdepend" />
 
-    <target name="dbconfig" description="Ensure that the DB has been configured">
-        <exec executable="cp">
-            <arg path="${basedir}/app/config/parameters.yml.dist" />
-            <arg path="${basedir}/app/config/parameters.yml" />
-        </exec>
-    </target>
-
     <target name="doctrine-migrate" description="Run Doctrine migrations">
         <exec executable="php">
             <arg path="${basedir}/app/console" />

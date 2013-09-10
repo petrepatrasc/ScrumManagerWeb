@@ -1,0 +1,4 @@
+scrum_manager_api:
+    resource: "@ScrumManagerApiBundle/Resources/config/routing.yml"
+    prefix:   /
+
