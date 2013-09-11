@@ -20,7 +20,25 @@ class AccountController extends Controller {
         $account = $this->get('account.service')->register($requestData);
 
         if ($account) {
-            return $this->get('json.service')->sucessResponse($account->toArray());
+            return $this->get('json.service')->sucessResponse();
+        }
+
+        return $this->get('json.service')->errorResponse();
+    }
+
+    /**
+     * Check the login credentials for a user.
+     */
+    public function loginAction() {
+        $requestData = $this->get('json.service')->decode($this->getRequest()->get('json_data'));
+
+        $username = $requestData['username'];
+        $password = $requestData['password'];
+
+        $account = $this->get('account.service')->login($username, $password);
+
+        if ($account) {
+            return $this->get('json.service')->sucessResponse($account->toSafeArray());
         }
 
         return $this->get('json.service')->errorResponse();

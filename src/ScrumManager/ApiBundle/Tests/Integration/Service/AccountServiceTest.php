@@ -4,6 +4,7 @@ namespace ScrumManager\ApiBundle\Tests\Integration;
 
 
 use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
+use ScrumManager\ApiBundle\Entity\Account;
 use ScrumManager\ApiBundle\Repository\AccountRepository;
 use ScrumManager\ApiBundle\Service\AccountService;
 use Symfony\Component\Validator\Validator;
@@ -425,5 +426,69 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $this->assertNull($account->getResetToken());
         $this->assertNull($account->getResetInitiatedAt());
         $this->assertNotNull($account->getUpdatedAt());
+    }
+
+    /**
+     * Register a new account and make sure that its data is valid.
+     * @param AccountService $service The service that should be called.
+     * @return Account Account entity that was created.
+     */
+    protected function createNewAccountAndAssertIt(AccountService $service) {
+        $account = $service->register($this->data);
+
+        $this->assertNotNull($account->getId());
+        $this->assertEquals($this->data['username'], $account->getUsername());
+        $this->assertNotEquals($this->data['password'], $account->getPassword());
+        $this->assertEquals($this->data['first_name'], $account->getFirstName());
+        $this->assertEquals($this->data['last_name'], $account->getLastName());
+        $this->assertEquals($this->data['email'], $account->getEmail());
+        $this->assertNull($account->getResetToken());
+        $this->assertNull($account->getResetInitiatedAt());
+
+        return $account;
+    }
+
+    /**
+     * Test the login method - first we will create a new user, and then attempt to log in using their credentials.
+     */
+    public function testLogin_Valid() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $accountLogin = $accountService->login($this->data['username'], $this->data['password']);
+
+        $this->assertNotNull($accountLogin);
+        $this->assertNotNull($accountLogin->getId());
+        $this->assertEquals($this->data['username'], $accountLogin->getUsername());
+        $this->assertNotEquals($this->data['password'], $accountLogin->getPassword());
+        $this->assertEquals($this->data['first_name'], $accountLogin->getFirstName());
+        $this->assertEquals($this->data['last_name'], $accountLogin->getLastName());
+        $this->assertEquals($this->data['email'], $accountLogin->getEmail());
+        $this->assertNull($accountLogin->getResetToken());
+        $this->assertNull($accountLogin->getResetInitiatedAt());
+    }
+
+    /**
+     * Test the login method when the username is invalid. We should retrieve a null result set in this scenario.
+     */
+    public function testLogin_InvalidUsername() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $accountLogin = $accountService->login($this->data['username'] . 'invalid', $this->data['password']);
+
+        $this->assertNull($accountLogin);
+    }
+
+    /**
+     * Test the login method when the password is invalid. We should retrieve a null result set in this scenario.
+     */
+    public function testLogin_InvalidPassword() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $accountLogin = $accountService->login($this->data['username'], $this->data['password'] . 'invalid');
+
+        $this->assertNull($accountLogin);
     }
 }

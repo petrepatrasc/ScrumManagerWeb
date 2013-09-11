@@ -99,6 +99,25 @@ class Account implements SerializableInterface {
     }
 
     /**
+     * Return the entity by mapping its fields into an array, however only returning data that should be returned via
+     * the API and that is considered "safe" for interception.
+     * @return array Array containing the mapping of the entity.
+     */
+    public function toSafeArray() {
+        $data = array(
+            'username' => $this->getUsername(),
+            'email' => $this->getEmail(),
+            'first_name' => $this->getFirstName(),
+            'last_name' => $this->getLastName(),
+            'api_key' => $this->getApiKey(),
+            'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s')
+        );
+
+        return $data;
+    }
+
+    /**
      * Constructor for the class.
      */
     public function __construct() {

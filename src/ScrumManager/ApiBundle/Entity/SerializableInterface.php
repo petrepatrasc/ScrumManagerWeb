@@ -22,4 +22,11 @@ interface SerializableInterface {
      * @return array Array containing the mapping of the entity.
      */
     public function toArray();
+
+    /**
+     * Return the entity by mapping its fields into an array, however only returning data that should be returned via
+     * the API and that is considered "safe" for interception.
+     * @return array Array containing the mapping of the entity.
+     */
+    public function toSafeArray();
 }

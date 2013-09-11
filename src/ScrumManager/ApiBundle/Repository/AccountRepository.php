@@ -23,4 +23,20 @@ class AccountRepository extends EntityRepository {
 
         return $entity;
     }
+
+    /**
+     * Find an account entity by its username and password.
+     * @param string $username The username associated to the account.
+     * @param string $password The password associated to the account.
+     * @param string $seed The seed associated to the account.
+     * @return Account|null The account entity.
+     */
+    public function findByUsernameAndPassword($username, $password, $seed) {
+        $criteria = array(
+            'username' => $username,
+            'password' => hash('sha512', $seed . $password)
+        );
+
+        return $this->findOneBy($criteria);
+    }
 }

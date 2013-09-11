@@ -60,6 +60,24 @@ class AccountService extends BaseService {
     }
 
     /**
+     * Attempt to retrieve an account in order to log them into the system.
+     * @param string $username The username that the account is associated to.
+     * @param string $password The password that the account is associated to.
+     * @return null|Account The account entity that is found.
+     */
+    public function login($username, $password) {
+        $accountWithSeed = $this->repo->findOneBy(array('username' => $username));
+
+        if ($accountWithSeed === null) {
+            return null;
+        }
+
+        $seed = $accountWithSeed->getSeed();
+
+        return $this->repo->findByUsernameAndPassword($username, $password, $seed);
+    }
+
+    /**
      * Set default data and generate account encoded data.
      * @param Account $account The account that should be affected.
      * @return Account The account instance after it has been manipulated.

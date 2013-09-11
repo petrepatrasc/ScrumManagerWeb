@@ -3,6 +3,15 @@ account_register:
     defaults: { _controller: ScrumManagerApiBundle:Account:register }
     methods: [POST]
 
+account_register:
+    path: /account/login
+    defaults: { _controller: ScrumManagerApiBundle:Account:login }
+    methods: [POST]
+
 testscreen_account_register:
     path: /testscreen/account/register
     defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:register }
+
+testscreen_account_login:
+    path: /testscreen/account/login
+    defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:login }
