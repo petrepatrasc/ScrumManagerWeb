@@ -4,7 +4,16 @@ php:
   - 5.3
   - 5.4
 
-before_script: composer install -n
+before_script:
+  - composer install -n
+  - mysql -u root -e "CREATE USER 'jenkins'@'localhost' IDENTIFIED BY 'jenkins'"
+  - mysql -u root -e "CREATE DATABASE scrum_manager DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;"
+  - mysql -u root -e "CREATE DATABASE scrum_manager_test DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;"
+  - mysql -u root -e "GRANT ALL PRIVILEGES ON scrum_manager.* TO 'jenkins'@'localhost' WITH GRANT OPTION;"
+  - mysql -u root -e "GRANT ALL PRIVILEGES ON scrum_manager_test.* TO 'jenkins'@'localhost' WITH GRANT OPTION;"
+  - app/console doctrine:migrations:migrate --no-interaction
+  - app/console doctrine:migrations:migrate --env=test --no-interaction
 
 script: phpunit -c app
+
 
