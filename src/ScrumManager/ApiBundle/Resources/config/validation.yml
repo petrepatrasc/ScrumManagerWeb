@@ -1,0 +1,59 @@
+ScrumManager\ApiBundle\Entity\Account:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
+
+    properties:
+        username:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: string}
+            - Length: {min: 2, max: 80}
+
+        seed:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: string}
+            - Length: {min: 20, max: 20}
+
+        email:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: string}
+            - Length: {min: 8, max: 180}
+            - Regex: "/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i"
+
+        firstName:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: string}
+            - Length: {min: 1, max: 80}
+
+        lastName:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: string}
+            - Length: {min: 1, max: 80}
+
+        apiKey:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: string}
+            - Length: {min: 128, max: 128}
+
+        resetToken:
+            - Type: {type: string}
+            - Length: {min: 128, max: 128}
+
+        resetInitiatedAt:
+            - DateTime: ~
+
+        createdAt:
+            - NotBlank: ~
+            - NotNull: ~
+            - DateTime: ~
+
+        updatedAt:
+            - NotBlank: ~
+            - NotNull: ~
+            - DateTime: ~

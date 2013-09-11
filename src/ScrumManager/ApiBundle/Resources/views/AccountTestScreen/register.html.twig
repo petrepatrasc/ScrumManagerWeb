@@ -1,0 +1,21 @@
+{% block registerForm %}
+    <form action="{{ path('testscreen_account_register') }}" method="POST">
+
+        <label>Username: </label>
+        <input type="text" name="username" />
+
+        <label>Password:</label>
+        <input type="password" name="password" />
+
+        <label>Email: </label>
+        <input type="text" name="email" />
+
+        <label>First name:</label>
+        <input type="text" name="first_name" />
+
+        <label>Last name:</label>
+        <input type="text" name="last_name" />
+
+        <input type="submit" value="Register" />
+    </form>
+{% endblock %}

@@ -86,9 +86,9 @@ class AccountTest extends BaseUnitTestCase {
         $this->assertEquals($arrayObject['email'], $account->getEmail());
         $this->assertEquals($arrayObject['api_key'], $account->getApiKey());
         $this->assertEquals($arrayObject['reset_token'], $account->getResetToken());
-        $this->assertEquals($arrayObject['reset_initiated_at'], $account->getResetInitiatedAt());
-        $this->assertEquals($arrayObject['created_at'], $account->getCreatedAt());
-        $this->assertEquals($arrayObject['updated_at'], $account->getUpdatedAt());
+        $this->assertEquals(new DateTime($arrayObject['reset_initiated_at']), $account->getResetInitiatedAt());
+        $this->assertEquals(new DateTime($arrayObject['created_at']), $account->getCreatedAt());
+        $this->assertEquals(new DateTime($arrayObject['updated_at']), $account->getUpdatedAt());
     }
 
     /**

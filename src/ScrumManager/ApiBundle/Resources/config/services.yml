@@ -1,7 +1,21 @@
 parameters:
-#    scrum_manager_api.example.class: ScrumManager\ApiBundle\Example
+  account.entity.class: ScrumManager\ApiBundle\Entity\Account
+  account.service.class: ScrumManager\ApiBundle\Service\AccountService
+  account.repository.class: ScrumManager\ApiBundle\Repository\AccountRepository
+
+  json.service.class: ScrumManager\ApiBundle\Service\JsonService
 
 services:
 #    scrum_manager_api.example:
 #        class: %scrum_manager_api.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+  account.service:
+    class: %account.service.class%
+    arguments: [@validator, @doctrine.orm.entity_manager ]
+
+  account.repository:
+    class: %account.entity.class%
+
+  json.service:
+    class: %json.service.class%

@@ -8,6 +8,12 @@
             <arg path="${basedir}/app/console" />
             <arg value="doctrine:migrations:migrate" />
         </exec>
+
+        <exec executable="php">
+            <arg path="${basedir}/app/console" />
+            <arg value="doctrine:migrations:migrate" />
+            <arg value="--env=test" />
+        </exec>
     </target>
 
     <target name="lint" description="Make sure that our PHP syntax is correct before we start testing">

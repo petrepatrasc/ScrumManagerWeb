@@ -1,0 +1,8 @@
+account_register:
+    path: /account/register
+    defaults: { _controller: ScrumManagerApiBundle:Account:register }
+    methods: [POST]
+
+testscreen_account_register:
+    path: /testscreen/account/register
+    defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:register }

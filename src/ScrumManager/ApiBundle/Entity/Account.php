@@ -4,6 +4,7 @@ namespace ScrumManager\ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use \DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class used to represent the Account entity.
@@ -76,6 +77,9 @@ class Account implements SerializableInterface {
      * @return array Array containing the mapping of the entity.
      */
     public function toArray() {
+        $resetInitiatedAt = (is_null($this->getResetInitiatedAt())) ? null :
+            $this->getResetInitiatedAt()->format('Y-m-d H:i:s');
+
         $data = array(
             'id' => $this->getId(),
             'username' => $this->getUsername(),
@@ -86,9 +90,9 @@ class Account implements SerializableInterface {
             'last_name' => $this->getLastName(),
             'api_key' => $this->getApiKey(),
             'reset_token' => $this->getResetToken(),
-            'reset_initiated_at' => $this->getResetInitiatedAt(),
-            'created_at' => $this->getCreatedAt(),
-            'updated_at' => $this->getUpdatedAt()
+            'reset_initiated_at' => $resetInitiatedAt,
+            'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s')
         );
 
         return $data;
@@ -145,12 +149,12 @@ class Account implements SerializableInterface {
     protected $apiKey;
 
     /**
-     * @ORM\Column(name="reset_token", type="string", length=160)
+     * @ORM\Column(name="reset_token", type="string", length=160, nullable = true)
      */
     protected $resetToken = null;
 
     /**
-     * @ORM\Column(name="reset_initiated_at", type="datetime")
+     * @ORM\Column(name="reset_initiated_at", type="datetime", nullable = true)
      */
     protected $resetInitiatedAt = null;
 

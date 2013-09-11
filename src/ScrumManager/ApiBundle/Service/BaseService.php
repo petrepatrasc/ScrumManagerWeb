@@ -1,10 +1,25 @@
 <?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: petre
+ * Date: 9/13/13
+ * Time: 7:49 AM
+ * To change this template use File | Settings | File Templates.
+ */
 
-namespace ScrumManager\ApiBundle\Tests\Unit;
+namespace ScrumManager\ApiBundle\Service;
 
-use \PHPUnit_Framework_TestCase;
+use Doctrine\ORM\EntityManager;
 
-class BaseUnitTestCase extends PHPUnit_Framework_TestCase {
+
+class BaseService {
+
+    /**
+     * Base constructor that gets called for all of the service classes.
+     */
+    public function __construct(EntityManager $em) {
+        $this->em = $em;
+    }
 
     /**
      * Generate a random string, with a specific length.
