@@ -43,4 +43,26 @@ class AccountController extends Controller {
 
         return $this->get('json.service')->errorResponse();
     }
+
+    /**
+     * Update a single entry in the database.
+     */
+    public function updateOneAction() {
+        $requestData = $this->get('json.service')->decode($this->getRequest()->get('json_data'));
+
+        $apiKey = $requestData['api_key'];
+
+        unset($requestData['api_key']);
+        unset($requestData['reset_token']);
+        unset($requestData['reset_initiated_at']);
+        unset($requestData['seed']);
+
+        $account = $this->get('account.service')->updateOne($apiKey, $requestData);
+
+        if ($account) {
+            return $this->get('json.service')->sucessResponse($account->toSafeArray());
+        }
+
+        return $this->get('json.service')->errorResponse();
+    }
 }

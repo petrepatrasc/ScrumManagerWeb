@@ -78,6 +78,47 @@ class AccountService extends BaseService {
     }
 
     /**
+     * Update the details of an account.
+     * @param string $apiKey The API key that is associated to the account.
+     * @param array $params The parameters with which to update the account.
+     * @return null|Account The entity that has been persisted to the database.
+     */
+    public function updateOne($apiKey, array $params = array()) {
+        // Find entity in database by identifier - if not found, return null.
+        $criteria = array(
+            'apiKey' => $apiKey
+        );
+
+        $account = $this->repo->findOneBy($criteria);
+
+        if ($account === null) {
+            return null;
+        }
+
+        // Update entity and persist it.
+        $account = Account::makeFromArray($params, $account);
+
+        if (isset($params['password'])) {
+            $this->encryptPassword($account, $params['password']);
+        }
+
+        return $this->repo->updateOne($account);
+    }
+
+    /**
+     * Recreate the password of an account, via its seed.
+     * @param Account $account The account entity that should be updated.
+     * @param string $password The new password that should be set on an account.
+     * @return null|Account The new account entity that has been persisted.
+     */
+    protected function encryptPassword(Account $account, $password) {
+        $seed = $account->getSeed();
+        $account->setPassword(hash('sha512', $seed . $password));
+
+        return $account;
+    }
+
+    /**
      * Set default data and generate account encoded data.
      * @param Account $account The account that should be affected.
      * @return Account The account instance after it has been manipulated.

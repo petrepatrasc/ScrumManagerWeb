@@ -1,6 +1,6 @@
 <?php
 
-namespace ScrumManager\ApiBundle\Tests\Integration;
+namespace ScrumManager\ApiBundle\Tests\EndToEnd;
 
 use Symfony\Component\HttpKernel\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -10,11 +10,12 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 
-class BaseControllerTestCase extends WebTestCase {
+class BaseFunctionalTestCase extends WebTestCase {
 
     /**
      * Assert successful response from a controller action.
      * @param Client $client The client that we are getting the response from.
+     * @return array The response data from the server.
      */
     public function assertSuccessfulResponse(Client $client) {
         $this->assertTrue(
@@ -27,11 +28,14 @@ class BaseControllerTestCase extends WebTestCase {
         $response = static::$kernel->getContainer()->get('json.service')->decode($client->getResponse()->getContent());
 
         $this->assertEquals(100, $response['status']);
+
+        return $response;
     }
 
     /**
      * Assert unsuccessful response from a controller action.
      * @param Client $client The client that we are getting the response from.
+     * @return array The response data from the server.
      */
     public function assertErrorResponse(Client $client) {
         $this->assertTrue(
@@ -44,6 +48,8 @@ class BaseControllerTestCase extends WebTestCase {
         $response = static::$kernel->getContainer()->get('json.service')->decode($client->getResponse()->getContent());
 
         $this->assertNotEquals(100, $response['status']);
+
+        return $response;
     }
 
     /**

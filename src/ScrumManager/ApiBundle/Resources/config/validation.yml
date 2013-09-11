@@ -2,6 +2,7 @@ ScrumManager\ApiBundle\Entity\Account:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: apiKey
 
     properties:
         username:

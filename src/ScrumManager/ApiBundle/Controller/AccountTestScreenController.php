@@ -47,4 +47,21 @@ class AccountTestScreenController extends Controller {
 
         return $this->render('@ScrumManagerApi/AccountTestScreen/login.html.twig');
     }
+
+    /**
+     * Test screen for updating a single entity.
+     */
+    public function updateOneAction() {
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $requestParameters = $this->getRequest()->request->all();
+            $requestParameters['password'] = hash('sha256', $requestParameters['password']);
+            $requestParameters = $this->get('json.service')->encode($requestParameters);
+
+            return $this->forward('ScrumManagerApiBundle:Account:updateOne', array(
+                'json_data' => $requestParameters
+            ));
+        }
+
+        return $this->render('@ScrumManagerApi/AccountTestScreen/update_one.html.twig');
+    }
 }

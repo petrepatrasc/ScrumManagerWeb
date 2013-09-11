@@ -491,4 +491,61 @@ class AccountServiceTest extends BaseIntegrationTestCase {
 
         $this->assertNull($accountLogin);
     }
+
+    /**
+     * Test the update method, by first creating a valid user, asserting its data and then updating that data
+     * via the service, and asserting the results.
+     */
+    public function testUpdateOne_Valid() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $updateData = array(
+            'username' => $this->generateRandomString(10),
+            'password' => $this->generateRandomString(60),
+            'first_name' => $this->generateRandomString(60),
+            'last_name' => $this->generateRandomString(60),
+            'email' => $this->generateRandomString(30) . '@dreamlabs.ro',
+            'reset_token' => null,
+            'reset_initiated_at' => null,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        );
+
+        $account = $accountService->updateOne($account->getApiKey(), $updateData);
+
+        $this->assertNotNull($account);
+        $this->assertNotNull($account->getId());
+        $this->assertEquals($updateData['username'], $account->getUsername());
+        $this->assertEquals(hash('sha512', $account->getSeed() . $updateData['password']), $account->getPassword());
+        $this->assertEquals($updateData['first_name'], $account->getFirstName());
+        $this->assertEquals($updateData['last_name'], $account->getLastName());
+        $this->assertEquals($updateData['email'], $account->getEmail());
+        $this->assertNull($account->getResetToken());
+        $this->assertNull($account->getResetInitiatedAt());
+    }
+
+    /**
+     * Test the update method, by providing an invalid API key.
+     */
+    public function testUpdateOnce_InvalidApiKey() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $updateData = array(
+            'username' => $this->generateRandomString(10),
+            'password' => $this->generateRandomString(60),
+            'first_name' => $this->generateRandomString(60),
+            'last_name' => $this->generateRandomString(60),
+            'email' => $this->generateRandomString(30) . '@dreamlabs.ro',
+            'reset_token' => null,
+            'reset_initiated_at' => null,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        );
+
+        $account = $accountService->updateOne($this->generateRandomString(20), $updateData);
+
+        $this->assertNull($account);
+    }
 }

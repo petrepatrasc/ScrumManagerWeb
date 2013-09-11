@@ -25,6 +25,15 @@ class AccountRepository extends EntityRepository {
     }
 
     /**
+     * Update an existing entity in the database.
+     * @param Account $entity The entity that should be updated in the database.
+     * @return Account The entity that has been persisted to the database.
+     */
+    public function updateOne(Account $entity) {
+        return $this->create($entity);
+    }
+
+    /**
      * Find an account entity by its username and password.
      * @param string $username The username associated to the account.
      * @param string $password The password associated to the account.

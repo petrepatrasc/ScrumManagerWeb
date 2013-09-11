@@ -5,7 +5,6 @@ namespace ScrumManager\ApiBundle\Tests\Integration;
 
 use ScrumManager\ApiBundle\Entity\Account;
 use ScrumManager\ApiBundle\Repository\AccountRepository;
-use ScrumManager\ApiBundle\Tests\Integration\BaseIntegrationTestCase;
 use \DateTime;
 
 class AccountRepositoryTest extends BaseIntegrationTestCase {
@@ -243,5 +242,86 @@ class AccountRepositoryTest extends BaseIntegrationTestCase {
         $accountWithLogin = $this->repo->findByUsernameAndPassword($data['username'], $data['password'] . 'random', $data['seed']);
 
         $this->assertNull($accountWithLogin);
+    }
+
+    /**
+     * Test the update one method, by creating a new valid entry, asserting it, updating that entry and then
+     * asserting the update values.
+     */
+    public function testUpdateOne_Valid() {
+        $createData = array(
+            'username' => $this->generateRandomString(10),
+            'password' => $this->generateRandomString(70),
+            'seed' => $this->generateRandomString(20),
+            'first_name' => $this->generateRandomString(60),
+            'last_name' => $this->generateRandomString(60),
+            'email' => $this->generateRandomString(120),
+            'api_key' => $this->generateRandomString(128),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        );
+
+        $account = new Account();
+        $account->setUsername($createData['username']);
+        $account->setPassword(hash('sha512', $createData['seed'] . $createData['password']));
+        $account->setSeed($createData['seed']);
+        $account->setFirstName($createData['first_name']);
+        $account->setLastName($createData['last_name']);
+        $account->setEmail($createData['email']);
+        $account->setApiKey($createData['api_key']);
+        $account->setCreatedAt(new DateTime($createData['created_at']));
+        $account->setUpdatedAt(new DateTime($createData['updated_at']));
+
+        $this->assertNull($account->getId());
+
+        $account = $this->repo->create($account);
+
+        $this->assertNotNull($account->getId());
+        $this->assertEquals($createData['username'], $account->getUsername());
+        $this->assertEquals(hash('sha512', $createData['seed'] . $createData['password']), $account->getPassword());
+        $this->assertEquals($createData['seed'], $account->getSeed());
+        $this->assertEquals($createData['first_name'], $account->getFirstName());
+        $this->assertEquals($createData['last_name'], $account->getLastName());
+        $this->assertEquals($createData['email'], $account->getEmail());
+        $this->assertEquals($createData['api_key'], $account->getApiKey());
+        $this->assertEquals(new DateTime($createData['created_at']), $account->getCreatedAt());
+        $this->assertEquals(new DateTime($createData['updated_at']), $account->getUpdatedAt());
+
+        $updateData = array(
+            'username' => $this->generateRandomString(10),
+            'password' => $this->generateRandomString(70),
+            'seed' => $this->generateRandomString(20),
+            'first_name' => $this->generateRandomString(60),
+            'last_name' => $this->generateRandomString(60),
+            'email' => $this->generateRandomString(120),
+            'api_key' => $this->generateRandomString(128),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        );
+
+        $accountUpdated = $this->repo->findOneBy(array('apiKey' => $createData['api_key']));
+
+        $accountUpdated->setUsername($updateData['username']);
+        $accountUpdated->setPassword(hash('sha512', $updateData['seed'] . $updateData['password']));
+        $accountUpdated->setSeed($updateData['seed']);
+        $accountUpdated->setFirstName($updateData['first_name']);
+        $accountUpdated->setLastName($updateData['last_name']);
+        $accountUpdated->setEmail($updateData['email']);
+        $accountUpdated->setApiKey($updateData['api_key']);
+        $accountUpdated->setCreatedAt(new DateTime($updateData['created_at']));
+        $accountUpdated->setUpdatedAt(new DateTime($updateData['updated_at']));
+
+        $accountUpdated = $this->repo->updateOne($accountUpdated);
+
+        $this->assertNotNull($accountUpdated->getId());
+        $this->assertEquals($updateData['username'], $accountUpdated->getUsername());
+        $this->assertEquals(hash('sha512', $updateData['seed'] . $updateData['password']), $accountUpdated->getPassword());
+        $this->assertEquals($updateData['seed'], $accountUpdated->getSeed());
+        $this->assertEquals($updateData['first_name'], $accountUpdated->getFirstName());
+        $this->assertEquals($updateData['last_name'], $accountUpdated->getLastName());
+        $this->assertEquals($updateData['email'], $accountUpdated->getEmail());
+        $this->assertEquals($updateData['api_key'], $accountUpdated->getApiKey());
+        $this->assertEquals(new DateTime($updateData['created_at']), $accountUpdated->getCreatedAt());
+        $this->assertEquals(new DateTime($updateData['updated_at']), $accountUpdated->getUpdatedAt());
     }
 }
