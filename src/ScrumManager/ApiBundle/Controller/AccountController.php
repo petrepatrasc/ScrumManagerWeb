@@ -85,4 +85,21 @@ class AccountController extends Controller {
 
         return $this->get('json.service')->errorResponse();
     }
+
+    /**
+     * Retrieve a single account from the application.
+     */
+    public function retrieveOneAction() {
+        $requestData = $this->get('json.service')->decode($this->getRequest()->get('json_data'));
+
+        $username = $requestData['username'];
+
+        $account = $this->get('account.service')->retrieveOne($username);
+
+        if ($account) {
+            return $this->get('json.service')->sucessResponse($account->toSafeArray());
+        }
+
+        return $this->get('json.service')->errorResponse();
+    }
 }

@@ -310,6 +310,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $crawler = $client->submit($form);
         $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $newPassword;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
     }
 
     /*
@@ -399,6 +407,64 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $form['old_password'] = $oldPassword;
         $form['new_password'] = $newPassword;
         $form['api_key'] = $apiKey;
+
+        $crawler = $client->submit($form);
+        $this->assertErrorResponse($client);
+    }
+
+    /*
+     * Test the retrieve method for a single account, when the data is valid.
+     */
+    public function testRetrieveOne_Valid() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/retrieveOne');
+        $form = $crawler->selectButton('Retrieve One')->form();
+        $form['username'] = $username;
+
+        $crawler = $client->submit($form);
+        $this->assertSuccessfulResponse($client);
+    }
+
+    /*
+     * Test the retrieve method for a single account, when the username is invalid.
+     */
+    public function testRetrieveOne_InvalidUsername() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/retrieveOne');
+        $form = $crawler->selectButton('Retrieve One')->form();
+        $form['username'] = $username . 'invalid';
 
         $crawler = $client->submit($form);
         $this->assertErrorResponse($client);

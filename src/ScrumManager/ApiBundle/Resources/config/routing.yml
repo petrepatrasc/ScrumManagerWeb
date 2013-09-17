@@ -18,6 +18,11 @@ account_change_password:
     defaults: { _controller: ScrumManagerApiBundle:Account:changePassword }
     methods: [POST]
 
+account_retrieve_one:
+    path: /Account/RetrieveOne
+    defaults: { _controller: ScrumManagerApiBundle:Account:retrieveOne }
+    methods: [POST]
+
 
 
 
@@ -36,3 +41,7 @@ testscreen_account_update_one:
 testscreen_account_change_password:
     path: /testscreen/account/changePassword
     defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:changePassword }
+
+testscreen_account_retrieve_one:
+    path: /testscreen/account/retrieveOne
+    defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:retrieveOne }

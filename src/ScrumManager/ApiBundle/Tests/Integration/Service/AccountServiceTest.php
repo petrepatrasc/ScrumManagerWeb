@@ -590,4 +590,35 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $this->assertNull($account);
     }
 
+    /**
+     * Test the mechanism for retrieving a single account when data is valid.
+     */
+    public function testRetrieveOne_Valid() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $retrievedAccount = $accountService->retrieveOne($account->getUsername());
+
+        $this->assertNotNull($retrievedAccount);
+        $this->assertNotNull($retrievedAccount->getId());
+        $this->assertEquals($this->data['username'], $retrievedAccount->getUsername());
+        $this->assertEquals($this->data['first_name'], $retrievedAccount->getFirstName());
+        $this->assertEquals($this->data['last_name'], $retrievedAccount->getLastName());
+        $this->assertEquals($this->data['email'], $retrievedAccount->getEmail());
+        $this->assertNull($retrievedAccount->getResetToken());
+        $this->assertNull($retrievedAccount->getResetInitiatedAt());
+    }
+
+    /**
+     * Test the mechanism for retriving a single account when the username does not exist.
+     */
+    public function testRetrieveOne_InvalidUsername() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $retrievedAccount = $accountService->retrieveOne($account->getUsername() . 'invalid');
+
+        $this->assertNull($retrievedAccount);
+    }
+
 }

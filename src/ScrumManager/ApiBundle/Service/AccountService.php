@@ -166,4 +166,24 @@ class AccountService extends BaseService {
 
         return null;
     }
+
+    /**
+     * Retrieve a single account from the database.
+     * @param string $username The username associated to the account.
+     * @return null|Account The account entity that has been found.
+     */
+    public function retrieveOne($username) {
+        // Find entity in database by identifier - if not found, return null.
+        $criteria = array(
+            'username' => $username
+        );
+
+        $account = $this->repo->findOneBy($criteria);
+
+        if ($account === null) {
+            return null;
+        }
+
+        return $account;
+    }
 }

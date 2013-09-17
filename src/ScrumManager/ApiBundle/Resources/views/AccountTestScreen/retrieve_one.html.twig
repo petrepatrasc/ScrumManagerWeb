@@ -1,0 +1,9 @@
+{% block retrieveForm %}
+    <form action="{{ path('testscreen_account_retrieve_one') }}" method="POST">
+
+        <label>Username: </label>
+        <input type="text" name="username" />
+
+        <input type="submit" value="Retrieve One" />
+    </form>
+{% endblock %}
