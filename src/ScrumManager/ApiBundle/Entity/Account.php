@@ -123,6 +123,7 @@ class Account implements SerializableInterface {
     public function __construct() {
         $this->createdAt = new DateTime('now');
         $this->updatedAt = new DateTime('now');
+        $this->active = true;
     }
 
     /**
@@ -186,6 +187,11 @@ class Account implements SerializableInterface {
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
+
+    /**
+     * @ORM\Column(name="active", type="boolean")
+     */
+    protected $active = true;
 
     /**
      * Get id
@@ -448,5 +454,28 @@ class Account implements SerializableInterface {
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     * @return Account
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 }

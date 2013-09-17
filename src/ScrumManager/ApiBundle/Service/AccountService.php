@@ -86,7 +86,8 @@ class AccountService extends BaseService {
     public function updateOne($apiKey, array $params = array()) {
         // Find entity in database by identifier - if not found, return null.
         $criteria = array(
-            'apiKey' => $apiKey
+            'apiKey' => $apiKey,
+            'active' => true
         );
 
         $account = $this->repo->findOneBy($criteria);
@@ -146,7 +147,8 @@ class AccountService extends BaseService {
     public function changePassword($apiKey, $oldPassword, $newPassword) {
         // Find entity in database by identifier - if not found, return null.
         $criteria = array(
-            'apiKey' => $apiKey
+            'apiKey' => $apiKey,
+            'active' => true
         );
 
         $account = $this->repo->findOneBy($criteria);
@@ -175,7 +177,8 @@ class AccountService extends BaseService {
     public function retrieveOne($username) {
         // Find entity in database by identifier - if not found, return null.
         $criteria = array(
-            'username' => $username
+            'username' => $username,
+            'active' => true
         );
 
         $account = $this->repo->findOneBy($criteria);
@@ -185,5 +188,27 @@ class AccountService extends BaseService {
         }
 
         return $account;
+    }
+
+    /**
+     * Deactivate an account that is active in the database.
+     * @param string $apiKey The API key of the account that needs to be disabled.
+     * @return null|Account The account that was deactivated.
+     */
+    public function deactivateAccount($apiKey) {
+        // Find entity in database by identifier - if not found, return null.
+        $criteria = array(
+            'apiKey' => $apiKey,
+            'active' => true
+        );
+
+        $account = $this->repo->findOneBy($criteria);
+
+        if ($account === null) {
+            return null;
+        }
+
+        $account->setActive(false);
+        return $this->repo->updateOne($account);
     }
 }

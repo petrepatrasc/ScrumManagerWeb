@@ -493,6 +493,20 @@ class AccountServiceTest extends BaseIntegrationTestCase {
     }
 
     /**
+     * Test the login method when the account has been deactivated. We should retrieve a null result set in this scenario.
+     */
+    public function testLogin_InvalidAccountDeactivated() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $account = $accountService->deactivateAccount($account->getApiKey());
+
+        $accountLogin = $accountService->login($this->data['username'], $this->data['password']);
+
+        $this->assertNull($accountLogin);
+    }
+
+    /**
      * Test the update method, by first creating a valid user, asserting its data and then updating that data
      * via the service, and asserting the results.
      */
@@ -523,6 +537,31 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $this->assertEquals($updateData['email'], $account->getEmail());
         $this->assertNull($account->getResetToken());
         $this->assertNull($account->getResetInitiatedAt());
+    }
+
+    /**
+     * Test the update method, by providing an account that has been deactivated.
+     */
+    public function testUpdateOne_InvalidAccountDeactivated() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $updateData = array(
+            'username' => $this->generateRandomString(10),
+            'password' => $this->generateRandomString(60),
+            'first_name' => $this->generateRandomString(60),
+            'last_name' => $this->generateRandomString(60),
+            'email' => $this->generateRandomString(30) . '@dreamlabs.ro',
+            'reset_token' => null,
+            'reset_initiated_at' => null,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        );
+
+        $account = $accountService->deactivateAccount($account->getApiKey());
+        $account = $accountService->updateOne($account->getApiKey(), $updateData);
+
+        $this->assertNull($account);
     }
 
     /**
@@ -578,6 +617,21 @@ class AccountServiceTest extends BaseIntegrationTestCase {
     }
 
     /**
+     * Test the change password mechanism when providing the account has been disabled.
+     */
+    public function testChangePassword_InvalidAccountDeactivated() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $account = $accountService->deactivateAccount($account->getApiKey());
+
+        $newPass = $this->generateRandomString(100);
+        $account = $accountService->changePassword($account->getApiKey(), $this->data['password'], $newPass);
+
+        $this->assertNull($account);
+    }
+
+    /**
      * Test the change password mechanism when providing an invalid old password.
      */
     public function testChangePassword_InvalidOldPassword() {
@@ -618,6 +672,61 @@ class AccountServiceTest extends BaseIntegrationTestCase {
 
         $retrievedAccount = $accountService->retrieveOne($account->getUsername() . 'invalid');
 
+        $this->assertNull($retrievedAccount);
+    }
+
+    /**
+     * Test the mechanism for retriving a single account when the account has already been deactivated.
+     */
+    public function testRetrieveOne_InvalidAccountDeactivated() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $account = $accountService->deactivateAccount($account->getApiKey());
+
+        $retrievedAccount = $accountService->retrieveOne($account->getUsername());
+
+        $this->assertNull($retrievedAccount);
+    }
+
+    /**
+     * Test the deactivation mechanism for a single account and when the data is valid.
+     */
+    public function testDeactivateAccount_Valid() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $retrievedAccount = $accountService->deactivateAccount($account->getApiKey());
+
+        $this->assertNotNull($retrievedAccount);
+        $this->assertFalse($retrievedAccount->getActive());
+    }
+
+    /**
+     * Test the deactivation mechanism for a single account and when the API key is invalid.
+     */
+    public function testDeactivateAccount_InvalidApiKey() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $retrievedAccount = $accountService->deactivateAccount($account->getApiKey() . 'invalid');
+
+        $this->assertNull($retrievedAccount);
+    }
+
+    /**
+     * Test the deactivation mechanism for a single account and when the account has already been disabled.
+     */
+    public function testDeactivateAccount_InvalidAccountAlreadyDisabled() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $retrievedAccount = $accountService->deactivateAccount($account->getApiKey());
+
+        $this->assertNotNull($retrievedAccount);
+        $this->assertFalse($retrievedAccount->getActive());
+
+        $retrievedAccount = $accountService->deactivateAccount($account->getApiKey());
         $this->assertNull($retrievedAccount);
     }
 

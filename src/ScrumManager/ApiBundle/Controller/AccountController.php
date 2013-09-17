@@ -91,13 +91,28 @@ class AccountController extends Controller {
      */
     public function retrieveOneAction() {
         $requestData = $this->get('json.service')->decode($this->getRequest()->get('json_data'));
-
         $username = $requestData['username'];
 
         $account = $this->get('account.service')->retrieveOne($username);
 
         if ($account) {
             return $this->get('json.service')->sucessResponse($account->toSafeArray());
+        }
+
+        return $this->get('json.service')->errorResponse();
+    }
+
+    /**
+     * Deactivate an account from the application.
+     */
+    public function deactivateAction() {
+        $requestData = $this->get('json.service')->decode($this->getRequest()->get('json_data'));
+        $apiKey = $requestData['api_key'];
+
+        $account = $this->get('account.service')->deactivateAccount($apiKey);
+
+        if ($account) {
+            return $this->get('json.service')->sucessResponse();
         }
 
         return $this->get('json.service')->errorResponse();

@@ -43,7 +43,8 @@ class AccountRepository extends EntityRepository {
     public function findByUsernameAndPassword($username, $password, $seed) {
         $criteria = array(
             'username' => $username,
-            'password' => hash('sha512', $seed . $password)
+            'password' => hash('sha512', $seed . $password),
+            'active' => true
         );
 
         return $this->findOneBy($criteria);

@@ -98,4 +98,20 @@ class AccountTestScreenController extends Controller {
 
         return $this->render('@ScrumManagerApi/AccountTestScreen/retrieve_one.html.twig');
     }
+
+    /**
+     * Test screen for deactivating an account.
+     */
+    public function deactivateAction() {
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $requestParameters = $this->getRequest()->request->all();
+            $requestParameters = $this->get('json.service')->encode($requestParameters);
+
+            return $this->forward('ScrumManagerApiBundle:Account:deactivate', array(
+                'json_data' => $requestParameters
+            ));
+        }
+
+        return $this->render('@ScrumManagerApi/AccountTestScreen/deactivate.html.twig');
+    }
 }

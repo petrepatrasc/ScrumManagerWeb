@@ -1,0 +1,9 @@
+{% block deactivateForm %}
+    <form action="{{ path('testscreen_account_deactivate') }}" method="POST">
+
+        <label>API Key: </label>
+        <input type="text" name="api_key" />
+
+        <input type="submit" value="Deactivate" />
+    </form>
+{% endblock %}
