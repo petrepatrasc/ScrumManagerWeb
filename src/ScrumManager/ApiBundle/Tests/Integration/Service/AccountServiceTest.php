@@ -34,7 +34,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
 
         $this->data = array(
             'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(60),
+            'password' => hash('sha256', $this->generateRandomString(60)),
             'first_name' => $this->generateRandomString(60),
             'last_name' => $this->generateRandomString(60),
             'email' => $this->generateRandomString(30) . '@dreamlabs.ro',
@@ -517,7 +517,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $this->assertNotNull($account);
         $this->assertNotNull($account->getId());
         $this->assertEquals($updateData['username'], $account->getUsername());
-        $this->assertEquals(hash('sha512', $account->getSeed() . $updateData['password']), $account->getPassword());
+        $this->assertNotEquals(hash('sha512', $account->getSeed() . $updateData['password']), $account->getPassword());
         $this->assertEquals($updateData['first_name'], $account->getFirstName());
         $this->assertEquals($updateData['last_name'], $account->getLastName());
         $this->assertEquals($updateData['email'], $account->getEmail());
@@ -548,4 +548,46 @@ class AccountServiceTest extends BaseIntegrationTestCase {
 
         $this->assertNull($account);
     }
+
+    /**
+     * Test the change password mechanism with valid data.
+     */
+    public function testChangePassword_Valid() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $newPass = $this->generateRandomString(100);
+        $account = $accountService->changePassword($account->getApiKey(), $this->data['password'], $newPass);
+
+        $this->assertNotNull($account);
+        $this->assertNotEquals($account->getPassword(), hash('sha512', $account->getSeed() . $this->data['password']));
+        $this->assertEquals($account->getPassword(), hash('sha512', $account->getSeed() . $newPass));
+    }
+
+    /**
+     * Test the change password mechanism when providing an invalid API key.
+     */
+    public function testChangePassword_InvalidApiKey() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $newPass = $this->generateRandomString(100);
+        $account = $accountService->changePassword($account->getApiKey() . 'invalid', $this->data['password'], $newPass);
+
+        $this->assertNull($account);
+    }
+
+    /**
+     * Test the change password mechanism when providing an invalid old password.
+     */
+    public function testChangePassword_InvalidOldPassword() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $newPass = $this->generateRandomString(100);
+        $account = $accountService->changePassword($account->getApiKey(), $this->data['password'] . 'invalid', $newPass);
+
+        $this->assertNull($account);
+    }
+
 }

@@ -265,4 +265,142 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertErrorResponse($client);
     }
+
+    /*
+     * Test the change password mechanism when providing valid data.
+     */
+    public function testChangePassword_Valid() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+
+        $apiKey = $responseData['api_key'];
+        $crawler = $client->request('GET', '/api/testscreen/account/changePassword');
+
+        $form = $crawler->selectButton('Change Password')->form();
+
+        $oldPassword = $password;
+        $newPassword = $this->generateRandomString(60);
+
+        $form['old_password'] = $oldPassword;
+        $form['new_password'] = $newPassword;
+        $form['api_key'] = $apiKey;
+
+        $crawler = $client->submit($form);
+        $this->assertSuccessfulResponse($client);
+    }
+
+    /*
+     * Test the change password mechanism when providing invalid old password.
+     */
+    public function testChangePassword_InvalidOldPassword() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+
+        $apiKey = $responseData['api_key'];
+        $crawler = $client->request('GET', '/api/testscreen/account/changePassword');
+
+        $form = $crawler->selectButton('Change Password')->form();
+
+        $oldPassword = $password . 'invalid';
+        $newPassword = $this->generateRandomString(60);
+
+        $form['old_password'] = $oldPassword;
+        $form['new_password'] = $newPassword;
+        $form['api_key'] = $apiKey;
+
+        $crawler = $client->submit($form);
+        $this->assertErrorResponse($client);
+    }
+
+    /*
+     * Test the change password mechanism when providing invalid API key.
+     */
+    public function testChangePassword_InvalidApiKey() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+
+        $apiKey = $this->generateRandomString(20);
+        $crawler = $client->request('GET', '/api/testscreen/account/changePassword');
+
+        $form = $crawler->selectButton('Change Password')->form();
+
+        $oldPassword = $password;
+        $newPassword = $this->generateRandomString(60);
+
+        $form['old_password'] = $oldPassword;
+        $form['new_password'] = $newPassword;
+        $form['api_key'] = $apiKey;
+
+        $crawler = $client->submit($form);
+        $this->assertErrorResponse($client);
+    }
 }

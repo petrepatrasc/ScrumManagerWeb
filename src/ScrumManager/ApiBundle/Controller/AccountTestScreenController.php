@@ -64,4 +64,19 @@ class AccountTestScreenController extends Controller {
 
         return $this->render('@ScrumManagerApi/AccountTestScreen/update_one.html.twig');
     }
+
+    public function changePasswordAction() {
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $requestParameters = $this->getRequest()->request->all();
+            $requestParameters['old_password'] = hash('sha256', $requestParameters['old_password']);
+            $requestParameters['new_password'] = hash('sha256', $requestParameters['new_password']);
+            $requestParameters = $this->get('json.service')->encode($requestParameters);
+
+            return $this->forward('ScrumManagerApiBundle:Account:changePassword', array(
+                'json_data' => $requestParameters
+            ));
+        }
+
+        return $this->render('@ScrumManagerApi/AccountTestScreen/change_password.html.twig');
+    }
 }

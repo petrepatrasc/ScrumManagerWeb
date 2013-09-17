@@ -98,10 +98,6 @@ class AccountService extends BaseService {
         // Update entity and persist it.
         $account = Account::makeFromArray($params, $account);
 
-        if (isset($params['password'])) {
-            $this->encryptPassword($account, $params['password']);
-        }
-
         return $this->repo->updateOne($account);
     }
 
@@ -138,5 +134,36 @@ class AccountService extends BaseService {
         $account->setApiKey($apiKey);
 
         return $account;
+    }
+
+    /**
+     * Change the password for an account in the database.
+     * @param string $apiKey The API key associated with the account.
+     * @param string $oldPassword The old password associated with the account.
+     * @param string $newPassword The new password associated with the account.
+     * @return null|Account The account entity that has been updated.
+     */
+    public function changePassword($apiKey, $oldPassword, $newPassword) {
+        // Find entity in database by identifier - if not found, return null.
+        $criteria = array(
+            'apiKey' => $apiKey
+        );
+
+        $account = $this->repo->findOneBy($criteria);
+
+        if ($account === null) {
+            return null;
+        }
+
+        // Check if old password is valid.
+        $seed = $account->getSeed();
+        $encryptedPassword = $account->getPassword();
+
+        if ($encryptedPassword === hash('sha512', $seed . $oldPassword)) {
+            $account = $this->encryptPassword($account, $newPassword);
+            return $this->repo->updateOne($account);
+        }
+
+        return null;
     }
 }
