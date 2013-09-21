@@ -211,4 +211,40 @@ class AccountService extends BaseService {
         $account->setActive(false);
         return $this->repo->updateOne($account);
     }
+
+    /**
+     * Reset the password for an account, by setting the resetInitiatedAt property, and by generating a
+     * random reset token.
+     * @param string $apiKey The API key that should be used for locating the account.
+     * @return null|Account The account entity that has been updated.
+     */
+    public function resetPasswordForAccount($apiKey) {
+        // Find entity in database by identifier - if not found, return null.
+        $criteria = array(
+            'apiKey' => $apiKey,
+            'active' => true
+        );
+
+        $account = $this->repo->findOneBy($criteria);
+
+        if ($account === null) {
+            return null;
+        }
+
+        $account = $this->generateResetDetails($account);
+
+        return $this->repo->updateOne($account);
+    }
+
+    /**
+     * Generate reset details for an Account.
+     * @param Account $account The account that should be affected.
+     * @return Account The account entity after its reset details have been set.
+     */
+    protected function generateResetDetails(Account $account) {
+        $account->setResetInitiatedAt(new DateTime('now'));
+        $account->setResetToken(hash('sha512', $this->generateRandomString(10)));
+
+        return $account;
+    }
 }

@@ -117,4 +117,20 @@ class AccountController extends Controller {
 
         return $this->get('json.service')->errorResponse();
     }
+
+    /**
+     * Reset the password for an account in the application.
+     */
+    public function resetPasswordAction() {
+        $requestData = $this->get('json.service')->decode($this->getRequest()->get('json_data'));
+        $apiKey = $requestData['api_key'];
+
+        $account = $this->get('account.service')->resetPasswordForAccount($apiKey);
+
+        if ($account) {
+            return $this->get('json.service')->sucessResponse();
+        }
+
+        return $this->get('json.service')->errorResponse();
+    }
 }

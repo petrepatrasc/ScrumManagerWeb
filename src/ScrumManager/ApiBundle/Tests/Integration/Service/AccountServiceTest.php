@@ -730,4 +730,42 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $this->assertNull($retrievedAccount);
     }
 
+    /**
+     * Test the password reset mechanism when the data is valid.
+     */
+    public function testResetPasswordForAccount_Valid() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $account = $accountService->resetPasswordForAccount($account->getApiKey());
+
+        $this->assertNotNull($account);
+        $this->assertNotNull($account->getResetToken());
+        $this->assertNotNull($account->getResetInitiatedAt());
+    }
+
+    /**
+     * Test the password reset mechanism when the API key is invalid.
+     */
+    public function testResetPasswordForAccount_InvalidApiKey() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $account = $accountService->resetPasswordForAccount($account->getApiKey() . 'invalid');
+
+        $this->assertNull($account);
+    }
+
+    /**
+     * Test the password reset mechanism when the account has already been previously deactivated.
+     */
+    public function testResetPasswordForAccount_InvalidAccountDeactivated() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $account = $accountService->deactivateAccount($account->getApiKey());
+        $account = $accountService->resetPasswordForAccount($account->getApiKey());
+
+        $this->assertNull($account);
+    }
 }

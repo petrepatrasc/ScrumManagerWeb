@@ -28,6 +28,10 @@ account_deactivate:
     defaults: { _controller: ScrumManagerApiBundle:Account:deactivate }
     methods: [POST]
 
+account_reset_password:
+    path: /Account/ResetPassword
+    defaults: { _controller: ScrumManagerApiBundle:Account:resetPassword }
+    methods: [POST]
 
 
 
@@ -54,3 +58,7 @@ testscreen_account_retrieve_one:
 testscreen_account_deactivate:
     path: /testscreen/account/deactivate
     defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:deactivate }
+
+testscreen_account_reset_password:
+    path: /testscreen/account/resetPassword
+    defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:resetPassword }

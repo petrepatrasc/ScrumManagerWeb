@@ -516,4 +516,43 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $crawler = $client->submit($form);
         $this->assertErrorResponse($client);
     }
+
+    /**
+     * Test the reset mechanism when data is valid.
+     */
+    public function testResetPassword_Valid() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+        $apiKey = $responseData['api_key'];
+
+        $crawler = $client->request('GET', '/api/testscreen/account/resetPassword');
+        $form = $crawler->selectButton('Reset Password')->form();
+        $form['api_key'] = $apiKey;
+
+        $crawler = $client->submit($form);
+        $this->assertSuccessfulResponse($client);
+    }
 }

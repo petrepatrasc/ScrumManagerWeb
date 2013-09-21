@@ -114,4 +114,20 @@ class AccountTestScreenController extends Controller {
 
         return $this->render('@ScrumManagerApi/AccountTestScreen/deactivate.html.twig');
     }
+
+    /**
+     * Test screen for resetting the password.
+     */
+    public function resetPasswordAction() {
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $requestParameters = $this->getRequest()->request->all();
+            $requestParameters = $this->get('json.service')->encode($requestParameters);
+
+            return $this->forward('ScrumManagerApiBundle:Account:resetPassword', array(
+                'json_data' => $requestParameters
+            ));
+        }
+
+        return $this->render('@ScrumManagerApi/AccountTestScreen/reset_password.html.twig');
+    }
 }
