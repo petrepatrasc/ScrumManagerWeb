@@ -517,6 +517,53 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $this->assertErrorResponse($client);
     }
 
+    /*
+     * Test the deactivate mechanism, when data is valid.
+     */
+    public function testDeactivate_Invalid() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+        $apiKey = $responseData['api_key'] . 'invalid';
+
+        $crawler = $client->request('GET', '/api/testscreen/account/deactivate');
+        $form = $crawler->selectButton('Deactivate')->form();
+        $form['api_key'] = $apiKey;
+
+        $crawler = $client->submit($form);
+        $this->assertErrorResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $this->assertSuccessfulResponse($client);
+    }
+
     /**
      * Test the reset mechanism when data is valid.
      */
@@ -555,4 +602,307 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $crawler = $client->submit($form);
         $this->assertSuccessfulResponse($client);
     }
+
+    /**
+     * Test the reset mechanism when data is invalid.
+     */
+    public function testResetPassword_InvalidApiKey() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+        $apiKey = $responseData['api_key'] . 'invalid';
+
+        $crawler = $client->request('GET', '/api/testscreen/account/resetPassword');
+        $form = $crawler->selectButton('Reset Password')->form();
+        $form['api_key'] = $apiKey;
+
+        $crawler = $client->submit($form);
+        $this->assertErrorResponse($client);
+    }
+
+    /**
+     * Test the new password mechanism when data is valid.
+     */
+    public function testNewPassword_Valid() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+        $apiKey = $responseData['api_key'];
+
+        $crawler = $client->request('GET', '/api/testscreen/account/resetPassword');
+        $form = $crawler->selectButton('Reset Password')->form();
+        $form['api_key'] = $apiKey;
+
+        $crawler = $client->submit($form);
+        $this->assertSuccessfulResponse($client);
+
+        $repo = $this->em->getRepository('ScrumManagerApiBundle:Account');
+        $accountEntity = $repo->findOneBy(array('apiKey' => $apiKey));
+        $this->assertNotNull($accountEntity);
+
+        $resetToken = $accountEntity->getResetToken();
+        $crawler = $client->request('GET', '/api/testscreen/account/newPassword');
+        $form = $crawler->selectButton('New Password')->form();
+        $form['api_key'] = $apiKey;
+        $form['reset_token'] = $resetToken;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+    }
+
+    /**
+     * Test the new password mechanism when the API key is invalid.
+     */
+    public function testNewPassword_InvalidApiKey() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+        $apiKey = $responseData['api_key'];
+
+        $crawler = $client->request('GET', '/api/testscreen/account/resetPassword');
+        $form = $crawler->selectButton('Reset Password')->form();
+        $form['api_key'] = $apiKey;
+
+        $crawler = $client->submit($form);
+        $this->assertSuccessfulResponse($client);
+
+        $repo = $this->em->getRepository('ScrumManagerApiBundle:Account');
+        $accountEntity = $repo->findOneBy(array('apiKey' => $apiKey));
+        $this->assertNotNull($accountEntity);
+
+        $resetToken = $accountEntity->getResetToken();
+        $crawler = $client->request('GET', '/api/testscreen/account/newPassword');
+        $form = $crawler->selectButton('New Password')->form();
+        $form['api_key'] = $apiKey . 'invalid';
+        $form['reset_token'] = $resetToken;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertErrorResponse($client);
+    }
+
+    /**
+     * Test the new password mechanism when the request token is invalid.
+     */
+    public function testNewPassword_InvalidRequestToken() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+        $apiKey = $responseData['api_key'];
+
+        $crawler = $client->request('GET', '/api/testscreen/account/resetPassword');
+        $form = $crawler->selectButton('Reset Password')->form();
+        $form['api_key'] = $apiKey;
+
+        $crawler = $client->submit($form);
+        $this->assertSuccessfulResponse($client);
+
+        $repo = $this->em->getRepository('ScrumManagerApiBundle:Account');
+        $accountEntity = $repo->findOneBy(array('apiKey' => $apiKey));
+        $this->assertNotNull($accountEntity);
+
+        $resetToken = $accountEntity->getResetToken();
+        $crawler = $client->request('GET', '/api/testscreen/account/newPassword');
+        $form = $crawler->selectButton('New Password')->form();
+        $form['api_key'] = $apiKey;
+        $form['reset_token'] = $resetToken . 'invalid';
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertErrorResponse($client);
+    }
+
+    /**
+     * Test the new password mechanism when the account has been deactivated.
+     */
+    public function testNewPassword_InvalidAccountDeactivated() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+        $apiKey = $responseData['api_key'];
+
+        $crawler = $client->request('GET', '/api/testscreen/account/resetPassword');
+        $form = $crawler->selectButton('Reset Password')->form();
+        $form['api_key'] = $apiKey;
+
+        $crawler = $client->submit($form);
+        $this->assertSuccessfulResponse($client);
+
+        $repo = $this->em->getRepository('ScrumManagerApiBundle:Account');
+        $accountEntity = $repo->findOneBy(array('apiKey' => $apiKey));
+        $this->assertNotNull($accountEntity);
+
+        $accountEntity->setActive(false);
+        $repo->updateOne($accountEntity);
+
+        $resetToken = $accountEntity->getResetToken();
+        $crawler = $client->request('GET', '/api/testscreen/account/newPassword');
+        $form = $crawler->selectButton('New Password')->form();
+        $form['api_key'] = $apiKey;
+        $form['reset_token'] = $resetToken;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertErrorResponse($client);
+    }
+
+    /**
+     * Test the new password mechanism when the reset password request never comes in.
+     */
+    public function testNewPassword_InvalidRequestForNewPasswordNeverMade() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/account/register');
+
+        $form = $crawler->selectButton('Register')->form();
+
+        $username = $this->generateRandomString(10);
+        $password = $this->generateRandomString(10);
+
+        $form['username'] = $username;
+        $form['password'] = $password;
+        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = $this->generateRandomString(10);
+        $form['last_name'] = $this->generateRandomString(10);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+
+        $crawler = $client->request('GET', '/api/testscreen/account/login');
+        $form = $crawler->selectButton('Login')->form();
+        $form['username'] = $username;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertSuccessfulResponse($client);
+        $apiKey = $responseData['api_key'];
+
+        $this->assertSuccessfulResponse($client);
+
+        $repo = $this->em->getRepository('ScrumManagerApiBundle:Account');
+        $accountEntity = $repo->findOneBy(array('apiKey' => $apiKey));
+        $this->assertNotNull($accountEntity);
+
+        $resetToken = $accountEntity->getResetToken();
+        $crawler = $client->request('GET', '/api/testscreen/account/newPassword');
+        $form = $crawler->selectButton('New Password')->form();
+        $form['api_key'] = $apiKey;
+        $form['reset_token'] = $resetToken;
+        $form['password'] = $password;
+
+        $crawler = $client->submit($form);
+        $responseData = $this->assertErrorResponse($client);
+    }
+
 }

@@ -130,4 +130,22 @@ class AccountTestScreenController extends Controller {
 
         return $this->render('@ScrumManagerApi/AccountTestScreen/reset_password.html.twig');
     }
+
+    /**
+     * Test screen for getting a new password using the reset token.
+     */
+    public function newPasswordAction() {
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $requestParameters = $this->getRequest()->request->all();
+            $encryptedPassword = hash('sha256', $requestParameters['password']);
+            $requestParameters['password'] = $encryptedPassword;
+            $requestParameters = $this->get('json.service')->encode($requestParameters);
+
+            return $this->forward('ScrumManagerApiBundle:Account:newPassword', array(
+                'json_data' => $requestParameters
+            ));
+        }
+
+        return $this->render('@ScrumManagerApi/AccountTestScreen/new_password.html.twig');
+    }
 }

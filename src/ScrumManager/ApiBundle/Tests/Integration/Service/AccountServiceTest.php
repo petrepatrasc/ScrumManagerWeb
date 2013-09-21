@@ -737,7 +737,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->resetPasswordForAccount($account->getApiKey());
+        $account = $accountService->resetPassword($account->getApiKey());
 
         $this->assertNotNull($account);
         $this->assertNotNull($account->getResetToken());
@@ -751,7 +751,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->resetPasswordForAccount($account->getApiKey() . 'invalid');
+        $account = $accountService->resetPassword($account->getApiKey() . 'invalid');
 
         $this->assertNull($account);
     }
@@ -764,7 +764,89 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $account = $this->createNewAccountAndAssertIt($accountService);
 
         $account = $accountService->deactivateAccount($account->getApiKey());
-        $account = $accountService->resetPasswordForAccount($account->getApiKey());
+        $account = $accountService->resetPassword($account->getApiKey());
+
+        $this->assertNull($account);
+    }
+
+    /**
+     * Test adding a new password when the data is valid, in the happy flow.
+     */
+    public function testNewPassword_Valid() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $account = $accountService->resetPassword($account->getApiKey());
+        $this->assertNotNull($account);
+
+        $oldPassword = $account->getPassword();
+        $newPassword = $this->generateRandomString(10);
+        $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken(), $newPassword);
+
+        $this->assertNotNull($account);
+        $this->assertNull($account->getResetInitiatedAt());
+        $this->assertNull($account->getResetToken());
+        $this->assertNotEquals($oldPassword, $account->getPassword());
+    }
+
+    /**
+     * Test adding a new password when the API key is invalid.
+     */
+    public function testNewPassword_InvalidApiKey() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $account = $accountService->resetPassword($account->getApiKey());
+        $this->assertNotNull($account);
+
+        $newPassword = $this->generateRandomString(10);
+        $account = $accountService->newPassword($account->getApiKey() . 'invalid', $account->getResetToken(), $newPassword);
+
+        $this->assertNull($account);
+    }
+
+    /**
+     * Test adding a new password when the reset token is invalid.
+     */
+    public function testNewPassword_InvalidResetToken() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $account = $accountService->resetPassword($account->getApiKey());
+        $this->assertNotNull($account);
+
+        $newPassword = $this->generateRandomString(10);
+        $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken() . 'invalid', $newPassword);
+
+        $this->assertNull($account);
+    }
+
+    /**
+     * Test adding a new password when the account is deactivated.
+     */
+    public function testNewPassword_InvalidAccountDeactivated() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $account = $accountService->resetPassword($account->getApiKey());
+        $this->assertNotNull($account);
+
+        $account = $accountService->deactivateAccount($account->getApiKey());
+        $newPassword = $this->generateRandomString(10);
+        $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken(), $newPassword);
+
+        $this->assertNull($account);
+    }
+
+    /**
+     * Test adding a new password when the request for a reset was never made.
+     */
+    public function testNewPassword_InvalidResetRequestNeverMade() {
+        $accountService = new AccountService($this->validator, $this->em);
+        $account = $this->createNewAccountAndAssertIt($accountService);
+
+        $newPassword = $this->generateRandomString(10);
+        $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken(), $newPassword);
 
         $this->assertNull($account);
     }

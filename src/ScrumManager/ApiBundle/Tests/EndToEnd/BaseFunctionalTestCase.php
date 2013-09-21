@@ -2,6 +2,7 @@
 
 namespace ScrumManager\ApiBundle\Tests\EndToEnd;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\StringInput;
@@ -11,6 +12,27 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 
 class BaseFunctionalTestCase extends WebTestCase {
+
+    /**
+     * @var EntityManager
+     */
+    protected $em;
+
+    public function setUp() {
+        static::$kernel = static::createKernel();
+        static::$kernel->boot();
+        $this->em = static::$kernel->getContainer()
+            ->get('doctrine')
+            ->getManager()
+        ;
+
+        parent::setUp();
+    }
+
+    protected function tearDown() {
+        parent::tearDown();
+        $this->em->close();
+    }
 
     /**
      * Assert successful response from a controller action.

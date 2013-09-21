@@ -218,7 +218,7 @@ class AccountService extends BaseService {
      * @param string $apiKey The API key that should be used for locating the account.
      * @return null|Account The account entity that has been updated.
      */
-    public function resetPasswordForAccount($apiKey) {
+    public function resetPassword($apiKey) {
         // Find entity in database by identifier - if not found, return null.
         $criteria = array(
             'apiKey' => $apiKey,
@@ -246,5 +246,38 @@ class AccountService extends BaseService {
         $account->setResetToken(hash('sha512', $this->generateRandomString(10)));
 
         return $account;
+    }
+
+    /**
+     * Having asked for a password reset, change the password of the user via the reset token.
+     * @param string $apiKey The API key of the account..
+     * @param string $resetToken The reset token of the account.
+     * @param string $newPassword The password that should be used in combination with the sed.
+     * @return null|Account The account with the new password.
+     */
+    public function newPassword($apiKey, $resetToken, $newPassword) {
+        // Find entity in database by identifier - if not found, return null.
+        $criteria = array(
+            'apiKey' => $apiKey,
+            'active' => true,
+            'resetToken' => $resetToken
+        );
+
+        $account = $this->repo->findOneBy($criteria);
+
+        if ($account === null) {
+            return null;
+        }
+
+        if ($account->getResetToken() === null) {
+            return null;
+        }
+
+        $seed = $account->getSeed();
+        $account->setPassword(hash('sha512', $seed . $newPassword));
+        $account->setResetToken(null);
+        $account->setResetInitiatedAt(null);
+
+        return $this->repo->updateOne($account);
     }
 }

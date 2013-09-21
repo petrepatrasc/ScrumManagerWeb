@@ -5,6 +5,7 @@ namespace ScrumManager\ApiBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use ScrumManager\ApiBundle\Entity\Account;
+use DateTime;
 
 /**
  * Class handles all of the DB mapping procedures.
@@ -30,6 +31,7 @@ class AccountRepository extends EntityRepository {
      * @return Account The entity that has been persisted to the database.
      */
     public function updateOne(Account $entity) {
+        $entity->setUpdatedAt(new DateTime('now'));
         return $this->create($entity);
     }
 
