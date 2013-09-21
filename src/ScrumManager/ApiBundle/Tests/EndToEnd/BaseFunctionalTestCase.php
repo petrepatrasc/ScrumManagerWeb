@@ -3,6 +3,7 @@
 namespace ScrumManager\ApiBundle\Tests\EndToEnd;
 
 use Doctrine\ORM\EntityManager;
+use ScrumManager\ApiBundle\ResponseCode\System\ResponseSystemSuccess;
 use Symfony\Component\HttpKernel\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\StringInput;
@@ -49,7 +50,7 @@ class BaseFunctionalTestCase extends WebTestCase {
 
         $response = static::$kernel->getContainer()->get('json.service')->decode($client->getResponse()->getContent());
 
-        $this->assertEquals(100, $response['status']);
+        $this->assertEquals(ResponseSystemSuccess::$code, $response['status']);
 
         return $response;
     }
@@ -69,7 +70,7 @@ class BaseFunctionalTestCase extends WebTestCase {
 
         $response = static::$kernel->getContainer()->get('json.service')->decode($client->getResponse()->getContent());
 
-        $this->assertNotEquals(100, $response['status']);
+        $this->assertNotEquals(ResponseSystemSuccess::$code, $response['status']);
 
         return $response;
     }

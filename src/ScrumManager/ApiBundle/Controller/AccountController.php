@@ -3,6 +3,9 @@
 namespace ScrumManager\ApiBundle\Controller;
 
 
+use ScrumManager\ApiBundle\ResponseCode\Account\ResponseAccountInvalidCredentials;
+use ScrumManager\ApiBundle\ResponseCode\Account\ResponseAccountNotFound;
+use ScrumManager\ApiBundle\ResponseCode\Account\ResponseAccountRegistrationFailure;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -23,7 +26,7 @@ class AccountController extends Controller {
             return $this->get('json.service')->sucessResponse();
         }
 
-        return $this->get('json.service')->errorResponse();
+        return $this->get('json.service')->errorResponse(new ResponseAccountRegistrationFailure());
     }
 
     /**
@@ -41,7 +44,7 @@ class AccountController extends Controller {
             return $this->get('json.service')->sucessResponse($account->toSafeArray());
         }
 
-        return $this->get('json.service')->errorResponse();
+        return $this->get('json.service')->errorResponse(new ResponseAccountInvalidCredentials());
     }
 
     /**
@@ -64,7 +67,7 @@ class AccountController extends Controller {
             return $this->get('json.service')->sucessResponse($account->toSafeArray());
         }
 
-        return $this->get('json.service')->errorResponse();
+        return $this->get('json.service')->errorResponse(new ResponseAccountNotFound());
     }
 
     /**
@@ -83,7 +86,7 @@ class AccountController extends Controller {
             return $this->get('json.service')->sucessResponse();
         }
 
-        return $this->get('json.service')->errorResponse();
+        return $this->get('json.service')->errorResponse(new ResponseAccountNotFound());
     }
 
     /**
@@ -99,7 +102,7 @@ class AccountController extends Controller {
             return $this->get('json.service')->sucessResponse($account->toSafeArray());
         }
 
-        return $this->get('json.service')->errorResponse();
+        return $this->get('json.service')->errorResponse(new ResponseAccountNotFound());
     }
 
     /**
@@ -115,7 +118,7 @@ class AccountController extends Controller {
             return $this->get('json.service')->sucessResponse();
         }
 
-        return $this->get('json.service')->errorResponse();
+        return $this->get('json.service')->errorResponse(new ResponseAccountNotFound);
     }
 
     /**
@@ -131,7 +134,7 @@ class AccountController extends Controller {
             return $this->get('json.service')->sucessResponse();
         }
 
-        return $this->get('json.service')->errorResponse();
+        return $this->get('json.service')->errorResponse(new ResponseAccountNotFound);
     }
 
     /**
@@ -149,6 +152,6 @@ class AccountController extends Controller {
             return $this->get('json.service')->sucessResponse();
         }
 
-        return $this->get('json.service')->errorResponse();
+        return $this->get('json.service')->errorResponse(new ResponseAccountNotFound);
     }
 }

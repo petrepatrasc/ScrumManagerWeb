@@ -2,6 +2,10 @@
 
 namespace ScrumManager\ApiBundle\Tests\EndToEnd;
 
+use ScrumManager\ApiBundle\ResponseCode\Account\ResponseAccountInvalidCredentials;
+use ScrumManager\ApiBundle\ResponseCode\Account\ResponseAccountNotFound;
+use ScrumManager\ApiBundle\ResponseCode\Account\ResponseAccountRegistrationFailure;
+
 class AccountControllerTest extends BaseFunctionalTestCase {
 
     /**
@@ -41,7 +45,8 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $crawler = $client->submit($form);
 
-        $this->assertErrorResponse($client);
+        $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountRegistrationFailure::$code, $responseData['status']);
     }
 
     /**
@@ -61,7 +66,8 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $crawler = $client->submit($form);
 
-        $this->assertErrorResponse($client);
+        $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountRegistrationFailure::$code, $responseData['status']);
     }
 
     /**
@@ -129,7 +135,8 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $crawler = $client->submit($form);
 
-        $this->assertErrorResponse($client);
+        $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountInvalidCredentials::$code, $responseData['status']);
     }
 
     /**
@@ -163,7 +170,8 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $crawler = $client->submit($form);
 
-        $this->assertErrorResponse($client);
+        $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountInvalidCredentials::$code, $responseData['status']);
     }
 
     /**
@@ -263,7 +271,8 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $crawler = $client->submit($form);
 
-        $this->assertErrorResponse($client);
+        $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountNotFound::$code, $responseData['status']);
     }
 
     /*
@@ -363,7 +372,8 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $form['api_key'] = $apiKey;
 
         $crawler = $client->submit($form);
-        $this->assertErrorResponse($client);
+        $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountNotFound::$code, $responseData['status']);
     }
 
     /*
@@ -409,7 +419,8 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $form['api_key'] = $apiKey;
 
         $crawler = $client->submit($form);
-        $this->assertErrorResponse($client);
+        $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountNotFound::$code, $responseData['status']);
     }
 
     /*
@@ -467,7 +478,8 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $form['username'] = $username . 'invalid';
 
         $crawler = $client->submit($form);
-        $this->assertErrorResponse($client);
+        $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountNotFound::$code, $responseData['status']);
     }
 
     /*
@@ -561,7 +573,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $form['password'] = $password;
 
         $crawler = $client->submit($form);
-        $this->assertSuccessfulResponse($client);
+        $responseData = $this->assertSuccessfulResponse($client);
     }
 
     /**
@@ -639,7 +651,8 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $form['api_key'] = $apiKey;
 
         $crawler = $client->submit($form);
-        $this->assertErrorResponse($client);
+        $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountNotFound::$code, $responseData['status']);
     }
 
     /**
@@ -746,6 +759,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $crawler = $client->submit($form);
         $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountNotFound::$code, $responseData['status']);
     }
 
     /**
@@ -799,6 +813,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $crawler = $client->submit($form);
         $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountNotFound::$code, $responseData['status']);
     }
 
     /**
@@ -855,6 +870,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $crawler = $client->submit($form);
         $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountNotFound::$code, $responseData['status']);
     }
 
     /**
@@ -903,6 +919,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $crawler = $client->submit($form);
         $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseAccountNotFound::$code, $responseData['status']);
     }
 
 }

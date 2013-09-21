@@ -10,6 +10,9 @@
 namespace ScrumManager\ApiBundle\Service;
 
 
+use ScrumManager\ApiBundle\ResponseCode\BaseResponseCode;
+use ScrumManager\ApiBundle\ResponseCode\System\ResponseSystemError;
+use ScrumManager\ApiBundle\ResponseCode\System\ResponseSystemSuccess;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
@@ -55,8 +58,8 @@ class JsonService {
      */
     public function sucessResponse(array $params = array(), $format = 'json') {
         $responseData = array (
-            'status' => 100,
-            'message' => 'Request was successful'
+            'status' => ResponseSystemSuccess::$code,
+            'message' => ResponseSystemSuccess::$message
         );
         $params = array_merge($params, $responseData);
 
@@ -65,20 +68,20 @@ class JsonService {
 
     /**
      * Return an unsuccessful JSON response.
-     * @param \Exception $exception Manipulator for status messages.
+     * @param BaseResponseCode $responseCode Manipulator for status messages.
      * @param string $format The format in which data should be encoded.
      * @return JsonResponse The JSON response for the unsuccessful request.
      */
-    public function errorResponse(\Exception $exception = null, $format = 'json') {
+    public function errorResponse($responseCode = null, $format = 'json') {
         $responseData = array(
-            'status' => 103,
-            'message' => 'Error in request'
+            'status' => ResponseSystemError::$code,
+            'message' => ResponseSystemError::$message
         );
 
         $params = array();
-        if (!is_null($exception)) {
-            $params['status'] = $exception->getCode();
-            $params['message'] = $exception->getMessage();
+        if (!is_null($responseCode)) {
+            $params['status'] = $responseCode->getCode();
+            $params['message'] = $responseCode->getMessage();
         }
         $responseData = array_merge($responseData, $params);
 
