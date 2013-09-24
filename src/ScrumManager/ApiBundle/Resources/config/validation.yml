@@ -58,3 +58,53 @@ ScrumManager\ApiBundle\Entity\Account:
             - NotBlank: ~
             - NotNull: ~
             - DateTime: ~
+
+ScrumManager\ApiBundle\Entity\Email:
+    properties:
+        sender:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: string}
+            - Length: {min: 2, max: 80}
+
+        receiver:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: string}
+            - Length: {min: 2, max: 80}
+
+        read:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: boolean}
+
+        subject:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: string}
+            - Length: {min: 1, max: 180}
+
+        content:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: text}
+
+        sent:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: boolean}
+
+        createdAt:
+            - NotBlank: ~
+            - NotNull: ~
+            - DateTime: ~
+
+        updatedAt:
+            - NotBlank: ~
+            - NotNull: ~
+            - DateTime: ~
+
+        active:
+            - NotBlank: ~
+            - NotNull: ~
+            - Type: {type: boolean}
