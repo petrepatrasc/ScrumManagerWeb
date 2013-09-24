@@ -38,36 +38,44 @@ account_new_password:
     defaults: { _controller: ScrumManagerApiBundle:Account:newPassword }
     methods: [POST]
 
+email_create_new_from_system:
+    path: /Email/CreateNewFromSystem
+    defaults: { _controller: ScrumManagerApiBundle:Email:createNewFromSystem }
+    methods: [POST]
 
 
 testscreen_account_register:
-    path: /testscreen/account/register
+    path: /testscreen/Account/Register
     defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:register }
 
 testscreen_account_login:
-    path: /testscreen/account/login
+    path: /testscreen/Account/Login
     defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:login }
 
 testscreen_account_update_one:
-    path: /testscreen/account/updateOne
+    path: /testscreen/Account/UpdateOne
     defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:updateOne }
 
 testscreen_account_change_password:
-    path: /testscreen/account/changePassword
+    path: /testscreen/Account/ChangePassword
     defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:changePassword }
 
 testscreen_account_retrieve_one:
-    path: /testscreen/account/retrieveOne
+    path: /testscreen/Account/RetrieveOne
     defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:retrieveOne }
 
 testscreen_account_deactivate:
-    path: /testscreen/account/deactivate
+    path: /testscreen/Account/Deactivate
     defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:deactivate }
 
 testscreen_account_reset_password:
-    path: /testscreen/account/resetPassword
+    path: /testscreen/Account/ResetPassword
     defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:resetPassword }
 
 testscreen_account_new_password:
-    path: /testscreen/account/newPassword
+    path: /testscreen/Account/NewPassword
     defaults: { _controller: ScrumManagerApiBundle:AccountTestScreen:newPassword }
+
+testscreen_email_create_new_from_system:
+    path: /testscreen/Email/CreateNewFromSystem
+    defaults: { _controller: ScrumManagerApiBundle:EmailTestScreen:createNewFromSystem }

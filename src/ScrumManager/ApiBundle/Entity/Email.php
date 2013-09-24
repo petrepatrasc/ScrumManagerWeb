@@ -108,11 +108,11 @@ class Email implements SerializableInterface {
      * Class constructor for new entities, setting some implicit defaults.
      */
     public function __construct() {
-        $this->createdAt = new DateTime('now');
-        $this->updatedAt = new DateTime('now');
-        $this->active = true;
-        $this->sent = false;
-        $this->read = false;
+        $this->setCreatedAt(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
+        $this->setActive(true);
+        $this->setSent(false);
+        $this->setRead(false);
     }
 
     /**
@@ -138,7 +138,7 @@ class Email implements SerializableInterface {
     protected $subject;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(name="`read`", type="boolean")
      */
     protected $read;
 

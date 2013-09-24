@@ -4,6 +4,7 @@ namespace ScrumManager\ApiBundle\Tests\Unit;
 
 
 use ScrumManager\ApiBundle\Entity\Email;
+use DateTime;
 
 class EmailTest extends BaseUnitTestCase {
 
@@ -38,6 +39,27 @@ class EmailTest extends BaseUnitTestCase {
         $this->assertEquals($this->constructionParameters['active'], $email->getActive());
         $this->assertNotNull($email->getCreatedAt());
         $this->assertNotNull($email->getUpdatedAt());
+    }
+
+    /**
+     * Test that when the data that is provided to the make from array is correct, the
+     * method will act accordingly.
+     */
+    public function testMakeFromArray_ValidAlsoWithDateTime() {
+        $this->constructionParameters['created_at'] = date('Y-m-d H:i:s');
+        $this->constructionParameters['updated_at'] = date('Y-m-d H:i:s');
+        $email = Email::makeFromArray($this->constructionParameters);
+
+        $this->assertNotNull($email);
+        $this->assertEquals($this->constructionParameters['sender'], $email->getSender());
+        $this->assertEquals($this->constructionParameters['receiver'], $email->getReceiver());
+        $this->assertEquals($this->constructionParameters['subject'], $email->getSubject());
+        $this->assertEquals($this->constructionParameters['content'], $email->getContent());
+        $this->assertEquals($this->constructionParameters['read'], $email->getRead());
+        $this->assertEquals($this->constructionParameters['sent'], $email->getSent());
+        $this->assertEquals($this->constructionParameters['active'], $email->getActive());
+        $this->assertEquals(new DateTime($this->constructionParameters['created_at']), $email->getCreatedAt());
+        $this->assertEquals(new DateTime($this->constructionParameters['updated_at']), $email->getUpdatedAt());
     }
 
     /**
