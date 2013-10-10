@@ -1,5 +1,8 @@
 # Scrum Manager #
 
+[![Travis Build Status](https://travis-ci.org/petrepatrasc/ScrumManagerWeb.png?branch=master)](https://travis-ci.org/petrepatrasc/ScrumManagerWeb)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/petrepatrasc/ScrumManagerWeb/badges/quality-score.png?s=e43dcaba3f014330813fe1583a9a17ffd5cefe85)](https://scrutinizer-ci.com/g/petrepatrasc/ScrumManagerWeb/)
+
 Scrum Manager is designed to be an open-source application for managing the Scrum meetings within a team. The project is very early on in its lifecycle, and development is still quite a way from finishing.
 
 The technical challenge of the project is to expose an API that would allow for information to be read and manipulated through: a website, a desktop application, and a mobile application. Information would sync between the devices, and they would all be able to interact together.
