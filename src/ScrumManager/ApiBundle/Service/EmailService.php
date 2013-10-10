@@ -83,4 +83,27 @@ class EmailService extends BaseService {
 
         return $email;
     }
+
+    /**
+     * Mark a notification as read.
+     * @param int $id The ID of the notification.
+     * @return null|Email
+     */
+    public function markOneAsRead($id) {
+        $criteria = array(
+            'active' => 1,
+            'id' => $id
+        );
+
+        $email = $this->repo->findOneBy($criteria);
+
+        if ($email === null) {
+            return null;
+        }
+
+        $email->setRead(true);
+        $this->repo->updateOne($email);
+
+        return $email;
+    }
 }

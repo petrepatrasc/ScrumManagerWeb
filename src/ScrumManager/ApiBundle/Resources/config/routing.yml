@@ -48,6 +48,11 @@ email_retrieve_one:
     defaults: { _controller: ScrumManagerApiBundle:Email:retrieveOne }
     methods: [POST]
 
+email_mark_one_as_read:
+    path: /Email/MarkOneAsRead
+    defaults: { _controller: ScrumManagerApiBundle:Email:markOneAsRead }
+    methods: [POST]
+
 
 testscreen_account_register:
     path: /testscreen/Account/Register
@@ -88,3 +93,7 @@ testscreen_email_create_new_from_system:
 testscreen_retrieve_one:
     path: /testscreen/Email/RetrieveOne
     defaults: { _controller: ScrumManagerApiBundle:EmailTestScreen:retrieveOne }
+
+testscreen_mark_one_as_read:
+    path: /testscreen/Email/MarkOneAsRead
+    defaults: { _controller: ScrumManagerApiBundle:EmailTestScreen:markOneAsRead }

@@ -1,0 +1,9 @@
+{% block markOneAsReadForm %}
+    <form action="{{ path('testscreen_mark_one_as_read') }}" method="POST">
+
+        <label>ID: </label>
+        <input type="text" name="id" />
+
+        <input type="submit" value="Mark email" />
+    </form>
+{% endblock %}

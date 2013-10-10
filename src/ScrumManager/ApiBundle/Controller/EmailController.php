@@ -4,6 +4,7 @@ namespace ScrumManager\ApiBundle\Controller;
 
 
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailCreateFailure;
+use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailReadFailure;
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailRetrieveFailure;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -40,9 +41,26 @@ class EmailController extends Controller {
         $email = $this->get('email.service')->retrieveOne($id);
 
         if ($email) {
-            return $this->get('json.service')->sucessResponse($email->toSafeArray());
+            return $this->get('json.service')->sucessResponse($email->toArray());
         }
 
         return $this->get('json.service')->errorResponse(new ResponseEmailRetrieveFailure());
+    }
+
+    /**
+     * Mark an email from the system as being read.
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function markOneAsReadAction() {
+        $requestData = $this->get('json.service')->decode($this->getRequest()->get('json_data'));
+
+        $id = $requestData['id'];
+        $email = $this->get('email.service')->markOneAsRead($id);
+
+        if ($email) {
+            return $this->get('json.service')->sucessResponse();
+        }
+
+        return $this->get('json.service')->errorResponse(new ResponseEmailReadFailure());
     }
 }

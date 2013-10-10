@@ -288,4 +288,41 @@ class EmailServiceTest extends BaseIntegrationTestCase {
 
         $this->assertNull($retrievedEmail);
     }
+
+    public function testMarkOneAsRead_Valid() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $email = $this->emailService->markOneAsRead($email->getId());
+        $this->assertNotNull($email);
+        $this->assertEquals(true, $email->getRead());
+    }
+
+    public function testMarkOneAsRead_InvalidId() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $email = $this->emailService->markOneAsRead($email->getId() + 1);
+        $this->assertNull($email);
+    }
+
+    public function testMarkOneAsRead_InvalidActive() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $email->setActive(false);
+        $this->repo->updateOne($email);
+
+        $email = $this->emailService->markOneAsRead($email->getId());
+        $this->assertNull($email);
+    }
 }
