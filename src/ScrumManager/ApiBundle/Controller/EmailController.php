@@ -4,6 +4,7 @@ namespace ScrumManager\ApiBundle\Controller;
 
 
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailCreateFailure;
+use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailRetrieveFailure;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class EmailController extends Controller {
@@ -26,5 +27,22 @@ class EmailController extends Controller {
         }
 
         return $this->get('json.service')->errorResponse(new ResponseEmailCreateFailure());
+    }
+
+    /**
+     * Retrieve an email from the system.
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function retrieveOneAction() {
+        $requestData = $this->get('json.service')->decode($this->getRequest()->get('json_data'));
+
+        $id = $requestData['id'];
+        $email = $this->get('email.service')->retrieveOne($id);
+
+        if ($email) {
+            return $this->get('json.service')->sucessResponse($email->toSafeArray());
+        }
+
+        return $this->get('json.service')->errorResponse(new ResponseEmailRetrieveFailure());
     }
 }

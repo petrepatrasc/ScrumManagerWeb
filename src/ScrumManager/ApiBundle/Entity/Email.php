@@ -77,8 +77,8 @@ class Email implements SerializableInterface {
             'content' => $this->getContent(),
             'sent' => $this->getSent(),
             'active' => $this->getActive(),
-            'created_at' => $this->getCreatedAt(),
-            'updated_at' => $this->getUpdatedAt()
+            'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s')
         );
 
         return $data;
@@ -97,8 +97,8 @@ class Email implements SerializableInterface {
             'read' => $this->getRead(),
             'content' => $this->getContent(),
             'sent' => $this->getSent(),
-            'created_at' => $this->getCreatedAt(),
-            'updated_at' => $this->getUpdatedAt()
+            'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s')
         );
 
         return $data;

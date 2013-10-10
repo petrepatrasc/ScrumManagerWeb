@@ -240,4 +240,52 @@ class EmailServiceTest extends BaseIntegrationTestCase {
         $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
         $this->assertNull($email);
     }
+
+    /**
+     * Test the behaviour of the method for retrieving an entry, when all the fields are valid.
+     */
+    public function testRetrieveOne_Valid() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $retrievedEmail = $this->emailService->retrieveOne($email->getId());
+
+        $this->assertEquals($email, $retrievedEmail);
+    }
+
+    /**
+     * Test the behaviour of the method when retrieving an entry with an invalid ID.
+     */
+    public function testRetrieveOne_InvalidId() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $retrievedEmail = $this->emailService->retrieveOne($email->getId() + 1);
+
+        $this->assertNull($retrievedEmail);
+    }
+
+    /**
+     * Test the behaviour of the method when retrieving an entry with an invalid active status.
+     */
+    public function testRetrieveOne_InvalidActive() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $email->setActive(false);
+        $this->repo->updateOne($email);
+
+        $retrievedEmail = $this->emailService->retrieveOne($email->getId());
+
+        $this->assertNull($retrievedEmail);
+    }
 }

@@ -30,4 +30,18 @@ class EmailRepository extends EntityRepository {
         $entity->setUpdatedAt(new DateTime('now'));
         return $this->create($entity);
     }
+
+    /**
+     * Retrieve the last entry stored in the database.
+     * @return Email The last Email entry stored in the database.
+     */
+    public function retrieveLast() {
+        $query = $this->getEntityManager()->createQuery(
+            "SELECT e
+            FROM ScrumManagerApiBundle:Email e
+            ORDER BY e.id DESC"
+        )->setMaxResults(1);
+
+        return $query->getSingleResult();
+    }
 }

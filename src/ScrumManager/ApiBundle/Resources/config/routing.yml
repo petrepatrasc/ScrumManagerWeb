@@ -43,6 +43,11 @@ email_create_new_from_system:
     defaults: { _controller: ScrumManagerApiBundle:Email:createNewFromSystem }
     methods: [POST]
 
+email_retrieve_one:
+    path: /Email/Retrieve
+    defaults: { _controller: ScrumManagerApiBundle:Email:retrieveOne }
+    methods: [POST]
+
 
 testscreen_account_register:
     path: /testscreen/Account/Register
@@ -79,3 +84,7 @@ testscreen_account_new_password:
 testscreen_email_create_new_from_system:
     path: /testscreen/Email/CreateNewFromSystem
     defaults: { _controller: ScrumManagerApiBundle:EmailTestScreen:createNewFromSystem }
+
+testscreen_retrieve_one:
+    path: /testscreen/Email/RetrieveOne
+    defaults: { _controller: ScrumManagerApiBundle:EmailTestScreen:retrieveOne }

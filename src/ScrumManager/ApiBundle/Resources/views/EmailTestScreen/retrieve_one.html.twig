@@ -1,0 +1,9 @@
+{% block retrieveOneForm %}
+    <form action="{{ path('testscreen_retrieve_one') }}" method="POST">
+
+        <label>ID: </label>
+        <input type="text" name="id" />
+
+        <input type="submit" value="Retrieve email" />
+    </form>
+{% endblock %}

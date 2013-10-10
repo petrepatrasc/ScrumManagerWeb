@@ -63,4 +63,24 @@ class EmailService extends BaseService {
 
         return $this->repo->create($email);
     }
+
+    /**
+     * Retrieve a single email from the system.
+     * @param int $id The ID of the email that should be retrieved.
+     * @return null|Email
+     */
+    public function retrieveOne($id) {
+        $criteria = array(
+            'active' => 1,
+            'id' => $id
+        );
+
+        $email = $this->repo->findOneBy($criteria);
+
+        if ($email === null) {
+            return null;
+        }
+
+        return $email;
+    }
 }
