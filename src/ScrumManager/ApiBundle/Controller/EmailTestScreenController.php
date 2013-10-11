@@ -23,6 +23,19 @@ class EmailTestScreenController extends Controller {
         return $this->render('@ScrumManagerApi/EmailTestScreen/create_new_from_system.html.twig');
     }
 
+    public function createOneFromAccountAction() {
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $requestParameters = $this->getRequest()->request->all();
+            $requestParameters = $this->get('json.service')->encode($requestParameters);
+
+            return $this->forward('ScrumManagerApiBundle:Email:createOneFromAccount', array(
+                'json_data' => $requestParameters
+            ));
+        }
+
+        return $this->render('@ScrumManagerApi/EmailTestScreen/create_one_from_account.html.twig');
+    }
+
     public function retrieveOneAction() {
         if ($this->getRequest()->getMethod() == 'POST') {
             $requestParameters = $this->getRequest()->request->all();

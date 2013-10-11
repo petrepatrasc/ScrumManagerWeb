@@ -12,7 +12,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
     /**
      * Test the functionality for a new email sent out from the system, when request data is valid.
      */
-    public function testCrateNewFromSystem_Valid() {
+    public function testCreateNewFromSystem_Valid() {
         $client = static::createClient();
         $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
 
@@ -30,12 +30,51 @@ class EmailControllerTest extends BaseFunctionalTestCase {
     /**
      * Test the functionality for a new email sent out from the system, when request data is invalid.
      */
-    public function testCrateNewFromSystem_ReceiverTooLong() {
+    public function testCreateNewFromSystem_ReceiverTooLong() {
         $client = static::createClient();
         $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
+        $form['receiver'] = $this->generateRandomString(81);
+        $form['subject'] = $this->generateRandomString(80);
+        $form['content'] = $this->generateRandomString(600);
+
+        $crawler = $client->submit($form);
+
+        $responseData = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseEmailCreateFailure::$code, $responseData['status']);
+    }
+
+    /**
+     * Test the functionality for a new email sent out from a user, when request data is valid.
+     */
+    public function testCreateOneFromAccount_Valid() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/Email/CreateOneFromAccount');
+
+        $form = $crawler->selectButton('Send email')->form();
+
+        $form['sender'] = $this->generateRandomString(20);
+        $form['receiver'] = $this->generateRandomString(20);
+        $form['subject'] = $this->generateRandomString(80);
+        $form['content'] = $this->generateRandomString(600);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+    }
+
+    /**
+     * Test the functionality for a new email sent out from a user, when request data is invalid.
+     */
+    public function testCreateOneFromAccount_ReceiverTooLong() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/Email/CreateOneFromAccount');
+
+        $form = $crawler->selectButton('Send email')->form();
+
+        $form['sender'] = $this->generateRandomString(20);
         $form['receiver'] = $this->generateRandomString(81);
         $form['subject'] = $this->generateRandomString(80);
         $form['content'] = $this->generateRandomString(600);

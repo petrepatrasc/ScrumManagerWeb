@@ -1,0 +1,18 @@
+{% block createOneFromAccountForm %}
+<form action="{{ path('testscreen_email_create_one_from_account') }}" method="POST">
+
+    <label>Sender:</label>
+    <input type="text" name="sender" />
+
+    <label>Receiver: </label>
+    <input type="text" name="receiver" />
+
+    <label>Subject:</label>
+    <input type="text" name="subject" />
+
+    <label>Content:</label>
+    <textarea name="content"></textarea>
+
+    <input type="submit" value="Send email" />
+</form>
+{% endblock %}
