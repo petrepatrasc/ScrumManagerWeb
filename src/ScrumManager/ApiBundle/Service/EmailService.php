@@ -85,6 +85,25 @@ class EmailService extends BaseService {
     }
 
     /**
+     * Find all of the active entries in the system.
+     * @return array Array containing all of the entries in the system.
+     * @todo Once serialisation procedure is done, make sure to change toArray functionality to something else.
+     */
+    public function retrieveAllActive() {
+        $criteria = array(
+            'active' => 1
+        );
+
+        $entries = $this->repo->findBy($criteria);
+
+        foreach ($entries as $key => $entry) {
+            $entries[$key] = $entry->toArray();
+        }
+
+        return $entries;
+    }
+
+    /**
      * Mark a notification as read.
      * @param int $id The ID of the notification.
      * @return null|Email

@@ -325,4 +325,62 @@ class EmailServiceTest extends BaseIntegrationTestCase {
         $email = $this->emailService->markOneAsRead($email->getId());
         $this->assertNull($email);
     }
+
+    public function testRetrieveAllActive_Valid() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+
+        $emailList = $this->emailService->retrieveAllActive();
+
+        $this->assertGreaterThan(0, count($emailList));
+
+        $foundEntry = false;
+        foreach($emailList as $emailEntry) {
+            if ($emailEntry['id'] == $email->getId()) {
+                $foundEntry = true;
+
+                $this->assertEquals($emailEntry['sender'], $email->getSender());
+                $this->assertEquals($emailEntry['receiver'], $email->getReceiver());
+                $this->assertEquals($emailEntry['subject'], $email->getSubject());
+                $this->assertEquals($emailEntry['content'], $email->getContent());
+                $this->assertEquals($emailEntry['read'], $email->getRead());
+                $this->assertEquals($emailEntry['sent'], $email->getSent());
+            }
+        }
+
+        $this->assertTrue($foundEntry);
+    }
+
+    public function testRetrieveAllActive_InvalidActive() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $email->setActive(false);
+        $this->repo->updateOne($email);
+
+        $emailList = $this->emailService->retrieveAllActive();
+
+        $foundEntry = false;
+        foreach($emailList as $emailEntry) {
+            if ($emailEntry['id'] == $email->getId()) {
+                $foundEntry = true;
+
+                $this->assertEquals($emailEntry['sender'], $email->getSender());
+                $this->assertEquals($emailEntry['receiver'], $email->getReceiver());
+                $this->assertEquals($emailEntry['subject'], $email->getSubject());
+                $this->assertEquals($emailEntry['content'], $email->getContent());
+                $this->assertEquals($emailEntry['read'], $email->getRead());
+                $this->assertEquals($emailEntry['sent'], $email->getSent());
+            }
+        }
+
+        $this->assertFalse($foundEntry);
+    }
 }
