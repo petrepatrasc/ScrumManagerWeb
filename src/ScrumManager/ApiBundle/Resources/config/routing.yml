@@ -58,6 +58,11 @@ email_mark_one_as_read:
     defaults: { _controller: ScrumManagerApiBundle:Email:markOneAsRead }
     methods: [POST]
 
+email_delete_one:
+    path: /Email/DeleteOne
+    defaults: { _controller: ScrumManagerApiBundle:Email:deleteOne }
+    methods: [POST]
+
 
 testscreen_account_register:
     path: /testscreen/Account/Register
@@ -106,3 +111,7 @@ testscreen_retrieve_one:
 testscreen_mark_one_as_read:
     path: /testscreen/Email/MarkOneAsRead
     defaults: { _controller: ScrumManagerApiBundle:EmailTestScreen:markOneAsRead }
+
+testscreen_delete_one:
+    path: /testscreen/Email/DeleteOne
+    defaults: { _controller: ScrumManagerApiBundle:EmailTestScreen:deleteOne }

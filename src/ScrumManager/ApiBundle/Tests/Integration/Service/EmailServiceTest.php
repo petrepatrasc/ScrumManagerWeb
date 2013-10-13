@@ -383,4 +383,52 @@ class EmailServiceTest extends BaseIntegrationTestCase {
 
         $this->assertFalse($foundEntry);
     }
+
+    public function testDeleteOne_Valid() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $this->emailService->deleteOne($email->getId());
+        $retrievedEmail = $this->emailService->retrieveOne($email->getId());
+
+        $this->assertNull($retrievedEmail);
+    }
+
+    public function testDeleteOne_InvalidId() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $this->emailService->deleteOne($email->getId() + 100);
+        $retrievedEmail = $this->emailService->retrieveOne($email->getId());
+
+        $this->assertNotNull($retrievedEmail);
+        $this->assertEquals($email->getId(), $retrievedEmail->getId());
+        $this->assertEquals($email->getActive(), $retrievedEmail->getActive());
+        $this->assertEquals($email->getSent(), $retrievedEmail->getSent());
+        $this->assertEquals($email->getRead(), $retrievedEmail->getRead());
+        $this->assertEquals($email->getSender(), $retrievedEmail->getSender());
+        $this->assertEquals($email->getReceiver(), $retrievedEmail->getReceiver());
+        $this->assertEquals($email->getCreatedAt(), $retrievedEmail->getCreatedAt());
+    }
+
+    public function testDeleteOne_InvalidActive() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $email->setActive(false);
+        $this->repo->updateOne($email);
+
+        $deletedEmail = $this->emailService->deleteOne($email->getId());
+
+        $this->assertNull($deletedEmail);
+    }
 }

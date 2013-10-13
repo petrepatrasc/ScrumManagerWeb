@@ -1,0 +1,9 @@
+{% block deleteOneForm %}
+    <form action="{{ path('testscreen_delete_one') }}" method="POST">
+
+        <label>ID: </label>
+        <input type="text" name="id" />
+
+        <input type="submit" value="Delete email" />
+    </form>
+{% endblock %}

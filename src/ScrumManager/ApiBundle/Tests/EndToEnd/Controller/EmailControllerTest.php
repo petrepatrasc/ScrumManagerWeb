@@ -4,6 +4,7 @@ namespace ScrumManager\ApiBundle\Tests\EndToEnd;
 
 
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailCreateFailure;
+use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailDeleteFailure;
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailReadFailure;
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailRetrieveFailure;
 
@@ -250,5 +251,56 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $crawler = $client->submit($form);
         $data = $this->assertErrorResponse($client);
         $this->assertEquals($data['status'], ResponseEmailReadFailure::$code);
+    }
+
+    public function testDeleteOne_Valid() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+
+        $form = $crawler->selectButton('Send email')->form();
+
+        $form['receiver'] = $this->generateRandomString(20);
+        $form['subject'] = $this->generateRandomString(80);
+        $form['content'] = $this->generateRandomString(600);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+        $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
+        $id = $email->getId();
+
+        $crawler = $client->request('GET', '/api/testscreen/Email/DeleteOne');
+
+        $form = $crawler->selectButton('Delete email')->form();
+        $form['id'] = $id;
+
+        $crawler = $client->submit($form);
+        $data = $this->assertSuccessfulResponse($client);
+    }
+
+    public function testDeleteOne_Invalid() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+
+        $form = $crawler->selectButton('Send email')->form();
+
+        $form['receiver'] = $this->generateRandomString(20);
+        $form['subject'] = $this->generateRandomString(80);
+        $form['content'] = $this->generateRandomString(600);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+        $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
+        $id = $email->getId() + 100;
+
+        $crawler = $client->request('GET', '/api/testscreen/Email/DeleteOne');
+
+        $form = $crawler->selectButton('Delete email')->form();
+        $form['id'] = $id;
+
+        $crawler = $client->submit($form);
+        $data = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseEmailDeleteFailure::$code, $data['status']);
     }
 }

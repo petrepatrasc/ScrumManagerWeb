@@ -125,4 +125,27 @@ class EmailService extends BaseService {
 
         return $email;
     }
+
+    /**
+     * Mark an entry as inactive in the system.
+     * @param int $id The ID of the entry in the system.
+     * @return null|Email The email entity that has been marked as inactive.
+     */
+    public function deleteOne($id) {
+        $criteria = array(
+            'active' => 1,
+            'id' => $id
+        );
+
+        $email = $this->repo->findOneBy($criteria);
+
+        if ($email === null) {
+            return null;
+        }
+
+        $email->setActive(false);
+        $this->repo->updateOne($email);
+
+        return $email;
+    }
 }

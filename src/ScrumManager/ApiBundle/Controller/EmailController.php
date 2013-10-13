@@ -4,6 +4,7 @@ namespace ScrumManager\ApiBundle\Controller;
 
 
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailCreateFailure;
+use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailDeleteFailure;
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailReadFailure;
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailRetrieveFailure;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -83,5 +84,18 @@ class EmailController extends Controller {
         }
 
         return $this->get('json.service')->errorResponse(new ResponseEmailReadFailure());
+    }
+
+    public function deleteOneAction() {
+        $requestData = $this->get('json.service')->decode($this->getRequest()->get('json_data'));
+
+        $id = $requestData['id'];
+        $email = $this->get('email.service')->deleteOne($id);
+
+        if ($email) {
+            return $this->get('json.service')->sucessResponse();
+        }
+
+        return $this->get('json.service')->errorResponse(new ResponseEmailDeleteFailure());
     }
 }
