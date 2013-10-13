@@ -1,1 +1,14 @@
-credentials.invalid: Date invalide pentru autentificare
+account:
+  credentials.invalid: Detalii autentificare incorecte
+  not.found: Contul nu a putut fi gasit
+  registration.failure: Datele pentru inregistrare nu sunt valide
+
+email:
+  create.failure: Crearea unui email nou a esuat
+  delete.failure: Stergerea unui email a esuat
+  read.failure: Marcarea unui email ca fiind citit a esuat
+  retrieve.failure: Accesarea unui email a esuat
+
+system:
+  general.error: S-a produs o eroare!
+  general.success: Cererea a fost executata cu succes

@@ -7,6 +7,6 @@ use ScrumManager\ApiBundle\ResponseCode\BaseResponseCode;
 
 class ResponseAccountInvalidCredentials extends BaseResponseCode {
 
-    public static $message = 'credentials.invalid';
+    public static $message = 'account.credentials.invalid';
     public static $code = 203;
 }

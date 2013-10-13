@@ -7,6 +7,6 @@ use ScrumManager\ApiBundle\ResponseCode\BaseResponseCode;
 
 class ResponseAccountRegistrationFailure extends BaseResponseCode {
 
-    public static $message = 'Registration incorrect - validation failed';
+    public static $message = 'account.registration.failure';
     public static $code = 202;
 }

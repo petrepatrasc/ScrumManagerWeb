@@ -7,6 +7,6 @@ use ScrumManager\ApiBundle\ResponseCode\BaseResponseCode;
 
 class ResponseEmailReadFailure extends BaseResponseCode{
 
-    public static $message = 'Marking an email as read failed';
+    public static $message = 'email.read.failure';
     public static $code = 303;
 }

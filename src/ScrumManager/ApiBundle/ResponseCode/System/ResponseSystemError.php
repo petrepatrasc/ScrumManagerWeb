@@ -7,6 +7,6 @@ use ScrumManager\ApiBundle\ResponseCode\BaseResponseCode;
 
 class ResponseSystemError extends BaseResponseCode {
 
-    public static $message = 'An error occurred!';
+    public static $message = 'system.general.error';
     public static $code = 103;
 }

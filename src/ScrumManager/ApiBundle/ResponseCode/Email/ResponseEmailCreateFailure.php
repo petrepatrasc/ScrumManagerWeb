@@ -8,6 +8,6 @@ use ScrumManager\ApiBundle\ResponseCode\BaseResponseCode;
 class ResponseEmailCreateFailure extends BaseResponseCode {
 
 
-    public static $message = 'Creating a new email failed';
+    public static $message = 'email.create.failure';
     public static $code = 301;
 }

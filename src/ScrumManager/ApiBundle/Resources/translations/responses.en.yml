@@ -1,1 +1,14 @@
-credentials.invalid: Invalid Credentials
+account:
+  credentials.invalid: Invalid Credentials
+  not.found: Account not found
+  registration.failure: Registration incorrect - validation failed
+
+email:
+  create.failure: Creating a new email failed
+  delete.failure: Deleting an email failed
+  read.failure: Marking an email as read failed
+  retrieve.failure: Retrieving an email failed
+
+system:
+  general.error: An error occurred!
+  general.success: Request was successful
