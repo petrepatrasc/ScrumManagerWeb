@@ -431,4 +431,58 @@ class EmailServiceTest extends BaseIntegrationTestCase {
 
         $this->assertNull($deletedEmail);
     }
+
+    public function testRetrieveAllReceivedForAccount_Valid() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $emailList = $this->emailService->retrieveAllReceivedForAccount($email->getReceiver());
+
+        $this->assertGreaterThan(0, count($emailList));
+
+        $foundEmail = false;
+        foreach($emailList as $emailEntry) {
+            if ($emailEntry['id'] == $email->getId()) {
+                $foundEmail = true;
+
+                $this->assertEquals($emailEntry['sender'], $email->getSender());
+                $this->assertEquals($emailEntry['receiver'], $email->getReceiver());
+                $this->assertEquals($emailEntry['subject'], $email->getSubject());
+                $this->assertEquals($emailEntry['content'], $email->getContent());
+                $this->assertEquals($emailEntry['read'], $email->getRead());
+                $this->assertEquals($emailEntry['sent'], $email->getSent());
+            }
+        }
+
+        $this->assertTrue($foundEmail);
+    }
+
+    public function testRetrieveAllReceivedForAccount_InvalidReceiver() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $emailList = $this->emailService->retrieveAllReceivedForAccount($email->getReceiver() . $this->generateRandomString(15));
+
+        $this->assertEquals(0, count($emailList));
+    }
+
+    public function testRetrieveAllReceivedForAccount_InvalidActive() {
+        $sender = $this->data['sender'];
+        $receiver = $this->data['receiver'];
+        $subject = $this->data['subject'];
+        $content = $this->data['content'];
+
+        $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
+        $email->setActive(false);
+        $this->repo->updateOne($email);
+        $emailList = $this->emailService->retrieveAllReceivedForAccount($email->getReceiver());
+
+        $this->assertEquals(0, count($emailList));
+    }
 }

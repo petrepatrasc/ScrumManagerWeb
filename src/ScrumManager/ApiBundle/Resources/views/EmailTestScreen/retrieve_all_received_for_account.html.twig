@@ -1,0 +1,9 @@
+{% block retrieveAllReceivedForAccountForm %}
+    <form action="{{ path('testscreen_retrieve_all_received_for_account') }}" method="POST">
+
+        <label>Username: </label>
+        <input type="text" name="username" />
+
+        <input type="submit" value="Retrieve email" />
+    </form>
+{% endblock %}

@@ -303,4 +303,57 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $data = $this->assertErrorResponse($client);
         $this->assertEquals(ResponseEmailDeleteFailure::$code, $data['status']);
     }
+
+    public function testRetrieveAllReceivedForAccount_Valid() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+
+        $form = $crawler->selectButton('Send email')->form();
+
+        $receiver = $this->generateRandomString(20);
+        $form['receiver'] = $receiver;
+        $form['subject'] = $this->generateRandomString(80);
+        $form['content'] = $this->generateRandomString(600);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+        $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
+        $id = $email->getId();
+
+        $crawler = $client->request('GET', '/api/testscreen/Email/RetrieveAllReceivedForAccount');
+
+        $form = $crawler->selectButton('Retrieve email')->form();
+        $form['username'] = $receiver;
+
+        $crawler = $client->submit($form);
+        $data = $this->assertSuccessfulResponse($client);
+    }
+
+    public function testRetrieveAllReceivedForAccount_InvalidReceiver() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+
+        $form = $crawler->selectButton('Send email')->form();
+
+        $receiver = $this->generateRandomString(20);
+        $form['receiver'] = $receiver;
+        $form['subject'] = $this->generateRandomString(80);
+        $form['content'] = $this->generateRandomString(600);
+
+        $crawler = $client->submit($form);
+
+        $this->assertSuccessfulResponse($client);
+        $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
+        $id = $email->getId();
+
+        $crawler = $client->request('GET', '/api/testscreen/Email/RetrieveAllReceivedForAccount');
+
+        $form = $crawler->selectButton('Retrieve email')->form();
+        $form['username'] = $receiver . $this->generateRandomString(15);
+
+        $crawler = $client->submit($form);
+        $data = $this->assertErrorResponse($client);
+        $this->assertEquals(ResponseEmailRetrieveFailure::$code, $data['status']);
+    }
 }

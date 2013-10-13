@@ -98,4 +98,17 @@ class EmailController extends Controller {
 
         return $this->get('json.service')->errorResponse(new ResponseEmailDeleteFailure());
     }
+
+    public function retrieveAllReceivedForAccountAction() {
+        $requestData = $this->get('json.service')->decode($this->getRequest()->get('json_data'));
+
+        $username = $requestData['username'];
+        $emailList = $this->get('email.service')->retrieveAllReceivedForAccount($username);
+
+        if (count($emailList)) {
+            return $this->get('json.service')->sucessResponse($emailList);
+        }
+
+        return $this->get('json.service')->errorResponse(new ResponseEmailRetrieveFailure());
+    }
 }

@@ -104,6 +104,26 @@ class EmailService extends BaseService {
     }
 
     /**
+     * Retrieve all of the email notifications for an account.
+     * @param string $receiver The receiver username.
+     * @return array Array containing all of the emails associated to an account.
+     */
+    public function retrieveAllReceivedForAccount($receiver) {
+        $criteria = array(
+            'active' => 1,
+            'receiver' => $receiver
+        );
+
+        $entries = $this->repo->findBy($criteria);
+
+        foreach ($entries as $key => $entry) {
+            $entries[$key] = $entry->toArray();
+        }
+
+        return $entries;
+    }
+
+    /**
      * Mark a notification as read.
      * @param int $id The ID of the notification.
      * @return null|Email

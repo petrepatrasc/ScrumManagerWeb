@@ -74,4 +74,17 @@ class EmailTestScreenController extends Controller {
 
         return $this->render('@ScrumManagerApi/EmailTestScreen/delete_one.html.twig');
     }
+
+    public function retrieveAllReceivedForAccountAction() {
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $requestParameters = $this->getRequest()->request->all();
+            $requestParameters = $this->get('json.service')->encode($requestParameters);
+
+            return $this->forward('ScrumManagerApiBundle:Email:retrieveAllReceivedForAccount', array(
+                'json_data' => $requestParameters
+            ));
+        }
+
+        return $this->render('@ScrumManagerApi/EmailTestScreen/retrieve_all_received_for_account.html.twig');
+    }
 }
