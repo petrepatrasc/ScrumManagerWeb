@@ -10,13 +10,16 @@ The technical challenge of the project is to expose an API that would allow for 
 
 ## Changelog ##
 
-Changelog information is kept here. I'll make an effort to keep it updated so that we can look back at all of the great things that we've done :)
+Changelog information is kept here.
+
+### 13 October, 2013 - Email API and Translations
+    1. Enabled an internal notifications system that allows for messages to be sent between users and from the system.
+    2. Enabled internationalisation support and translated the strings currently defined in the system.
+    3. Focusing too much on delivering the API experience for the user ruins some of the overview - will focus on models for now, and return to controllers when application is more scalable.
 
 ### 22 September, 2013 - User API ###
-    Plan for milestone is as follows:
-
-    1. Create entity with required fields.
-    2. Implement the following actions:
+    1. Created User entity with required fields.
+    2. Implemented the following actions:
 
       a. Register
       b. Login
@@ -29,6 +32,6 @@ Changelog information is kept here. I'll make an effort to keep it updated so th
       i. RetrieveAll
       j. ChangePassword
 
-    3. Create repository and service class.
-    4. Create debug forms for easier functional testing.
+    3. Created repository and service class.
+    4. Created debug forms for easier functional testing.
     5. Automatic testing.
