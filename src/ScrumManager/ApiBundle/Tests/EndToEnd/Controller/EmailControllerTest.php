@@ -15,7 +15,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
      */
     public function testCreateNewFromSystem_Valid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -33,7 +33,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
      */
     public function testCreateNewFromSystem_ReceiverTooLong() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -52,7 +52,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
      */
     public function testCreateOneFromAccount_Valid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateOneFromAccount');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateOneFromAccount');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -71,7 +71,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
      */
     public function testCreateOneFromAccount_ReceiverTooLong() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateOneFromAccount');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateOneFromAccount');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -89,7 +89,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
     public function testRetrieveOne_Success() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -103,7 +103,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
         $id = $email->getId();
 
-        $crawler = $client->request('GET', '/api/testscreen/Email/RetrieveOne');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/RetrieveOne');
 
         $form = $crawler->selectButton('Retrieve email')->form();
         $form['id'] = $id;
@@ -122,7 +122,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
     public function testRetrieveOne_InvalidId() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -136,7 +136,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
         $id = $email->getId() + 1;
 
-        $crawler = $client->request('GET', '/api/testscreen/Email/RetrieveOne');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/RetrieveOne');
 
         $form = $crawler->selectButton('Retrieve email')->form();
         $form['id'] = $id;
@@ -148,7 +148,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
     public function testRetrieveOne_InvalidActive() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -164,7 +164,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $this->em->getRepository('ScrumManagerApiBundle:Email')->updateOne($email);
         $id = $email->getId();
 
-        $crawler = $client->request('GET', '/api/testscreen/Email/RetrieveOne');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/RetrieveOne');
 
         $form = $crawler->selectButton('Retrieve email')->form();
         $form['id'] = $id;
@@ -176,7 +176,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
     public function testMarkOneAsRead_Success() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -190,7 +190,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
         $id = $email->getId();
 
-        $crawler = $client->request('GET', '/api/testscreen/Email/MarkOneAsRead');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/MarkOneAsRead');
 
         $form = $crawler->selectButton('Mark email')->form();
         $form['id'] = $id;
@@ -201,7 +201,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
     public function testMarkOneAsRead_InvalidId() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -215,7 +215,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
         $id = $email->getId() + 1;
 
-        $crawler = $client->request('GET', '/api/testscreen/Email/MarkOneAsRead');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/MarkOneAsRead');
 
         $form = $crawler->selectButton('Mark email')->form();
         $form['id'] = $id;
@@ -227,7 +227,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
     public function testMarkOneAsRead_InvalidActive() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -243,7 +243,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $this->em->getRepository('ScrumManagerApiBundle:Email')->updateOne($email);
         $id = $email->getId();
 
-        $crawler = $client->request('GET', '/api/testscreen/Email/MarkOneAsRead');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/MarkOneAsRead');
 
         $form = $crawler->selectButton('Mark email')->form();
         $form['id'] = $id;
@@ -255,7 +255,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
     public function testDeleteOne_Valid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -269,7 +269,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
         $id = $email->getId();
 
-        $crawler = $client->request('GET', '/api/testscreen/Email/DeleteOne');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/DeleteOne');
 
         $form = $crawler->selectButton('Delete email')->form();
         $form['id'] = $id;
@@ -280,7 +280,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
     public function testDeleteOne_Invalid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -294,7 +294,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
         $id = $email->getId() + 100;
 
-        $crawler = $client->request('GET', '/api/testscreen/Email/DeleteOne');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/DeleteOne');
 
         $form = $crawler->selectButton('Delete email')->form();
         $form['id'] = $id;
@@ -306,7 +306,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
     public function testRetrieveAllReceivedForAccount_Valid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -321,7 +321,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
         $id = $email->getId();
 
-        $crawler = $client->request('GET', '/api/testscreen/Email/RetrieveAllReceivedForAccount');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/RetrieveAllReceivedForAccount');
 
         $form = $crawler->selectButton('Retrieve email')->form();
         $form['username'] = $receiver;
@@ -332,7 +332,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
     public function testRetrieveAllReceivedForAccount_InvalidReceiver() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Email/CreateNewFromSystem');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/CreateNewFromSystem');
 
         $form = $crawler->selectButton('Send email')->form();
 
@@ -347,7 +347,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $email = $this->em->getRepository('ScrumManagerApiBundle:Email')->retrieveLast();
         $id = $email->getId();
 
-        $crawler = $client->request('GET', '/api/testscreen/Email/RetrieveAllReceivedForAccount');
+        $crawler = $client->request('GET', '/en/api/testscreen/Email/RetrieveAllReceivedForAccount');
 
         $form = $crawler->selectButton('Retrieve email')->form();
         $form['username'] = $receiver . $this->generateRandomString(15);

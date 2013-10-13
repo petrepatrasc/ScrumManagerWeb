@@ -15,18 +15,27 @@ use ScrumManager\ApiBundle\ResponseCode\System\ResponseSystemError;
 use ScrumManager\ApiBundle\ResponseCode\System\ResponseSystemSuccess;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Translation\Translator;
 
 class JsonService {
 
     /**
+     * JSON Encoder service
      * @var \Symfony\Component\Serializer\Encoder\JsonEncoder
      */
     protected $json;
 
     /**
+     * Translator service
+     * @var \Symfony\Component\Translation\Translator
+     */
+    protected $translator;
+
+    /**
      * JSON Service constructor.
      */
-    public function __construct() {
+    public function __construct(Translator $translator) {
+        $this->translator = $translator;
         $this->json = new JsonEncoder();
     }
 
@@ -59,7 +68,7 @@ class JsonService {
     public function sucessResponse(array $params = array(), $format = 'json') {
         $responseData = array (
             'status' => ResponseSystemSuccess::$code,
-            'message' => ResponseSystemSuccess::$message
+            'message' => $this->translator->trans(ResponseSystemSuccess::$message, array(), 'responses')
         );
         $params = array_merge($params, $responseData);
 
@@ -75,13 +84,13 @@ class JsonService {
     public function errorResponse($responseCode = null, $format = 'json') {
         $responseData = array(
             'status' => ResponseSystemError::$code,
-            'message' => ResponseSystemError::$message
+            'message' => $this->translator->trans(ResponseSystemError::$message, array(), 'responses')
         );
 
         $params = array();
         if (!is_null($responseCode)) {
             $params['status'] = $responseCode->getCode();
-            $params['message'] = $responseCode->getMessage();
+            $params['message'] = $this->translator->trans($responseCode->getMessage(), array(), 'responses');
         }
         $responseData = array_merge($responseData, $params);
 

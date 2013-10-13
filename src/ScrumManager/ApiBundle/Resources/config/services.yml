@@ -20,3 +20,4 @@ services:
 
   json.service:
     class: %json.service.class%
+    arguments: [@translator]

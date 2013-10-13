@@ -13,7 +13,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testRegister_Valid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -33,7 +33,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testRegister_InvalidEmail() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -54,7 +54,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testRegister_InvalidUsername() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -75,7 +75,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testLogin_ValidData() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -92,7 +92,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
 
         $form = $crawler->selectButton('Login')->form();
 
@@ -109,7 +109,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testLogin_InvalidUsername() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -126,7 +126,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
 
         $form = $crawler->selectButton('Login')->form();
 
@@ -144,7 +144,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testLogin_InvalidPassword() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -161,7 +161,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
 
         $form = $crawler->selectButton('Login')->form();
 
@@ -179,7 +179,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testUpdateOne_Valid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -196,7 +196,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -205,7 +205,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
 
         $apiKey = $responseData['api_key'];
-        $crawler = $client->request('GET', '/api/testscreen/Account/UpdateOne');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/UpdateOne');
 
         $form = $crawler->selectButton('Update')->form();
 
@@ -229,7 +229,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testUpdateOne_InvalidApiKey() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -246,7 +246,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -255,7 +255,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
 
         $apiKey = $this->generateRandomString(20);
-        $crawler = $client->request('GET', '/api/testscreen/Account/UpdateOne');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/UpdateOne');
 
         $form = $crawler->selectButton('Update')->form();
 
@@ -280,7 +280,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testChangePassword_Valid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -297,7 +297,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -306,7 +306,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
 
         $apiKey = $responseData['api_key'];
-        $crawler = $client->request('GET', '/api/testscreen/Account/ChangePassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/ChangePassword');
 
         $form = $crawler->selectButton('Change Password')->form();
 
@@ -320,7 +320,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $crawler = $client->submit($form);
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $newPassword;
@@ -334,7 +334,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testChangePassword_InvalidOldPassword() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -351,7 +351,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -360,7 +360,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
 
         $apiKey = $responseData['api_key'];
-        $crawler = $client->request('GET', '/api/testscreen/Account/ChangePassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/ChangePassword');
 
         $form = $crawler->selectButton('Change Password')->form();
 
@@ -381,7 +381,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testChangePassword_InvalidApiKey() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -398,7 +398,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -407,7 +407,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
 
         $apiKey = $this->generateRandomString(20);
-        $crawler = $client->request('GET', '/api/testscreen/Account/ChangePassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/ChangePassword');
 
         $form = $crawler->selectButton('Change Password')->form();
 
@@ -428,7 +428,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testRetrieveOne_Valid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -444,7 +444,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $crawler = $client->submit($form);
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/RetrieveOne');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/RetrieveOne');
         $form = $crawler->selectButton('Retrieve One')->form();
         $form['username'] = $username;
 
@@ -457,7 +457,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testRetrieveOne_InvalidUsername() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -473,7 +473,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $crawler = $client->submit($form);
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/RetrieveOne');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/RetrieveOne');
         $form = $crawler->selectButton('Retrieve One')->form();
         $form['username'] = $username . 'invalid';
 
@@ -487,7 +487,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testDeactivate_Valid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -504,7 +504,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -513,14 +513,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
         $apiKey = $responseData['api_key'];
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Deactivate');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Deactivate');
         $form = $crawler->selectButton('Deactivate')->form();
         $form['api_key'] = $apiKey;
 
         $crawler = $client->submit($form);
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -534,7 +534,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testDeactivate_Invalid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -551,7 +551,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -560,14 +560,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
         $apiKey = $responseData['api_key'] . 'invalid';
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Deactivate');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Deactivate');
         $form = $crawler->selectButton('Deactivate')->form();
         $form['api_key'] = $apiKey;
 
         $crawler = $client->submit($form);
         $this->assertErrorResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -581,7 +581,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testResetPassword_Valid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -598,7 +598,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -607,7 +607,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
         $apiKey = $responseData['api_key'];
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/ResetPassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/ResetPassword');
         $form = $crawler->selectButton('Reset Password')->form();
         $form['api_key'] = $apiKey;
 
@@ -620,7 +620,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testResetPassword_InvalidApiKey() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -637,7 +637,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -646,7 +646,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
         $apiKey = $responseData['api_key'] . 'invalid';
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/ResetPassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/ResetPassword');
         $form = $crawler->selectButton('Reset Password')->form();
         $form['api_key'] = $apiKey;
 
@@ -660,7 +660,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testNewPassword_Valid() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -677,7 +677,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -686,7 +686,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
         $apiKey = $responseData['api_key'];
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/ResetPassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/ResetPassword');
         $form = $crawler->selectButton('Reset Password')->form();
         $form['api_key'] = $apiKey;
 
@@ -698,7 +698,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $this->assertNotNull($accountEntity);
 
         $resetToken = $accountEntity->getResetToken();
-        $crawler = $client->request('GET', '/api/testscreen/Account/NewPassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/NewPassword');
         $form = $crawler->selectButton('New Password')->form();
         $form['api_key'] = $apiKey;
         $form['reset_token'] = $resetToken;
@@ -713,7 +713,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testNewPassword_InvalidApiKey() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -730,7 +730,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -739,7 +739,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
         $apiKey = $responseData['api_key'];
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/ResetPassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/ResetPassword');
         $form = $crawler->selectButton('Reset Password')->form();
         $form['api_key'] = $apiKey;
 
@@ -751,7 +751,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $this->assertNotNull($accountEntity);
 
         $resetToken = $accountEntity->getResetToken();
-        $crawler = $client->request('GET', '/api/testscreen/Account/NewPassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/NewPassword');
         $form = $crawler->selectButton('New Password')->form();
         $form['api_key'] = $apiKey . 'invalid';
         $form['reset_token'] = $resetToken;
@@ -767,7 +767,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testNewPassword_InvalidRequestToken() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -784,7 +784,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -793,7 +793,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
         $apiKey = $responseData['api_key'];
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/ResetPassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/ResetPassword');
         $form = $crawler->selectButton('Reset Password')->form();
         $form['api_key'] = $apiKey;
 
@@ -805,7 +805,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $this->assertNotNull($accountEntity);
 
         $resetToken = $accountEntity->getResetToken();
-        $crawler = $client->request('GET', '/api/testscreen/Account/NewPassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/NewPassword');
         $form = $crawler->selectButton('New Password')->form();
         $form['api_key'] = $apiKey;
         $form['reset_token'] = $resetToken . 'invalid';
@@ -821,7 +821,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testNewPassword_InvalidAccountDeactivated() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -838,7 +838,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -847,7 +847,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $responseData = $this->assertSuccessfulResponse($client);
         $apiKey = $responseData['api_key'];
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/ResetPassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/ResetPassword');
         $form = $crawler->selectButton('Reset Password')->form();
         $form['api_key'] = $apiKey;
 
@@ -862,7 +862,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $repo->updateOne($accountEntity);
 
         $resetToken = $accountEntity->getResetToken();
-        $crawler = $client->request('GET', '/api/testscreen/Account/NewPassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/NewPassword');
         $form = $crawler->selectButton('New Password')->form();
         $form['api_key'] = $apiKey;
         $form['reset_token'] = $resetToken;
@@ -878,7 +878,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
      */
     public function testNewPassword_InvalidRequestForNewPasswordNeverMade() {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/api/testscreen/Account/Register');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Register');
 
         $form = $crawler->selectButton('Register')->form();
 
@@ -895,7 +895,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $this->assertSuccessfulResponse($client);
 
-        $crawler = $client->request('GET', '/api/testscreen/Account/Login');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/Login');
         $form = $crawler->selectButton('Login')->form();
         $form['username'] = $username;
         $form['password'] = $password;
@@ -911,7 +911,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $this->assertNotNull($accountEntity);
 
         $resetToken = $accountEntity->getResetToken();
-        $crawler = $client->request('GET', '/api/testscreen/Account/NewPassword');
+        $crawler = $client->request('GET', '/en/api/testscreen/Account/NewPassword');
         $form = $crawler->selectButton('New Password')->form();
         $form['api_key'] = $apiKey;
         $form['reset_token'] = $resetToken;
