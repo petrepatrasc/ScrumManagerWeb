@@ -34,6 +34,10 @@
                 <directory>../src/*/*Bundle/Tests</directory>
                 <directory>../src/*/Bundle/*Bundle/Resources</directory>
                 <directory>../src/*/Bundle/*Bundle/Tests</directory>
+                <directory>../src/*/*Bundle/ResponseCode</directory>
+                <directory>../src/*/*Bundle/DependencyInjection</directory>
+                <file>../src/ScrumManager/ApiBundle/ScrumManagerApiBundle.php</file>
+                <file>../src/ScrumManager/ApiBundle/Entity/SerializableInterface.php</file>
             </exclude>
         </whitelist>
     </filter>
