@@ -6,6 +6,7 @@ namespace ScrumManager\ApiBundle\Tests\Integration;
 use ScrumManager\ApiBundle\Entity\Account;
 use ScrumManager\ApiBundle\Repository\AccountRepository;
 use \DateTime;
+use ScrumManager\ApiBundle\Service\GeneralHelperService;
 
 class AccountRepositoryTest extends BaseIntegrationTestCase {
 
@@ -29,14 +30,14 @@ class AccountRepositoryTest extends BaseIntegrationTestCase {
      */
     public function testCreate_Valid() {
         $data = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(128),
-            'seed' => $this->generateRandomString(20),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(120),
-            'api_key' => $this->generateRandomString(128),
-            'reset_token' => $this->generateRandomString(128),
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(128),
+            'seed' => GeneralHelperService::generateRandomString(20),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(120),
+            'api_key' => GeneralHelperService::generateRandomString(128),
+            'reset_token' => GeneralHelperService::generateRandomString(128),
             'reset_initiated_at' => date('Y-m-d H:i:s'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -78,14 +79,14 @@ class AccountRepositoryTest extends BaseIntegrationTestCase {
      */
     public function testLogin_Valid() {
         $data = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(70),
-            'seed' => $this->generateRandomString(20),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(120),
-            'api_key' => $this->generateRandomString(128),
-            'reset_token' => $this->generateRandomString(128),
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(70),
+            'seed' => GeneralHelperService::generateRandomString(20),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(120),
+            'api_key' => GeneralHelperService::generateRandomString(128),
+            'reset_token' => GeneralHelperService::generateRandomString(128),
             'reset_initiated_at' => date('Y-m-d H:i:s'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -143,14 +144,14 @@ class AccountRepositoryTest extends BaseIntegrationTestCase {
      */
     public function testLogin_InvalidUsername() {
         $data = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(70),
-            'seed' => $this->generateRandomString(20),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(120),
-            'api_key' => $this->generateRandomString(128),
-            'reset_token' => $this->generateRandomString(128),
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(70),
+            'seed' => GeneralHelperService::generateRandomString(20),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(120),
+            'api_key' => GeneralHelperService::generateRandomString(128),
+            'reset_token' => GeneralHelperService::generateRandomString(128),
             'reset_initiated_at' => date('Y-m-d H:i:s'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -196,14 +197,14 @@ class AccountRepositoryTest extends BaseIntegrationTestCase {
      */
     public function testLogin_InvalidPassword() {
         $data = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(70),
-            'seed' => $this->generateRandomString(20),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(120),
-            'api_key' => $this->generateRandomString(128),
-            'reset_token' => $this->generateRandomString(128),
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(70),
+            'seed' => GeneralHelperService::generateRandomString(20),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(120),
+            'api_key' => GeneralHelperService::generateRandomString(128),
+            'reset_token' => GeneralHelperService::generateRandomString(128),
             'reset_initiated_at' => date('Y-m-d H:i:s'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -250,13 +251,13 @@ class AccountRepositoryTest extends BaseIntegrationTestCase {
      */
     public function testUpdateOne_Valid() {
         $createData = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(70),
-            'seed' => $this->generateRandomString(20),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(120),
-            'api_key' => $this->generateRandomString(128),
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(70),
+            'seed' => GeneralHelperService::generateRandomString(20),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(120),
+            'api_key' => GeneralHelperService::generateRandomString(128),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         );
@@ -288,13 +289,13 @@ class AccountRepositoryTest extends BaseIntegrationTestCase {
         $this->assertEquals(new DateTime($createData['updated_at']), $account->getUpdatedAt());
 
         $updateData = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(70),
-            'seed' => $this->generateRandomString(20),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(120),
-            'api_key' => $this->generateRandomString(128),
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(70),
+            'seed' => GeneralHelperService::generateRandomString(20),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(120),
+            'api_key' => GeneralHelperService::generateRandomString(128),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         );

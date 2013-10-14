@@ -7,6 +7,7 @@ use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 use ScrumManager\ApiBundle\Entity\Account;
 use ScrumManager\ApiBundle\Repository\AccountRepository;
 use ScrumManager\ApiBundle\Service\AccountService;
+use ScrumManager\ApiBundle\Service\GeneralHelperService;
 use Symfony\Component\Validator\Validator;
 use \DateTime;
 
@@ -33,11 +34,11 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $this->validator = static::$kernel->getContainer()->get('validator');
 
         $this->data = array(
-            'username' => $this->generateRandomString(10),
-            'password' => hash('sha256', $this->generateRandomString(60)),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(30) . '@dreamlabs.ro',
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => hash('sha256', GeneralHelperService::generateRandomString(60)),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(30) . '@dreamlabs.ro',
             'reset_token' => null,
             'reset_initiated_at' => null,
             'created_at' => date('Y-m-d H:i:s'),
@@ -144,7 +145,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the username is too long..
      */
     public function testRegister_UsernameIsTooLarge() {
-        $this->data['username'] = $this->generateRandomString(81);
+        $this->data['username'] = GeneralHelperService::generateRandomString(81);
 
         $accountService = new AccountService($this->validator, $this->em);
         $account = $accountService->register($this->data);
@@ -260,7 +261,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the email is too long.
      */
     public function testRegister_EmailIsTooLong() {
-        $this->data['email'] = $this->generateRandomString(168) . '@dreamlabs.ro';
+        $this->data['email'] = GeneralHelperService::generateRandomString(168) . '@dreamlabs.ro';
 
         $accountService = new AccountService($this->validator, $this->em);
         $account = $accountService->register($this->data);
@@ -320,7 +321,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the first name is too long.
      */
     public function testRegister_FirstNameIsTooLong() {
-        $this->data['first_name'] = $this->generateRandomString(81);
+        $this->data['first_name'] = GeneralHelperService::generateRandomString(81);
 
         $accountService = new AccountService($this->validator, $this->em);
         $account = $accountService->register($this->data);
@@ -380,7 +381,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the last name is too long.
      */
     public function testRegister_LastNameIsTooLong() {
-        $this->data['last_name'] = $this->generateRandomString(81);
+        $this->data['last_name'] = GeneralHelperService::generateRandomString(81);
 
         $accountService = new AccountService($this->validator, $this->em);
         $account = $accountService->register($this->data);
@@ -515,11 +516,11 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $account = $this->createNewAccountAndAssertIt($accountService);
 
         $updateData = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(60),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(30) . '@dreamlabs.ro',
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(60),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(30) . '@dreamlabs.ro',
             'reset_token' => null,
             'reset_initiated_at' => null,
             'created_at' => date('Y-m-d H:i:s'),
@@ -547,11 +548,11 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $account = $this->createNewAccountAndAssertIt($accountService);
 
         $updateData = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(60),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(30) . '@dreamlabs.ro',
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(60),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(30) . '@dreamlabs.ro',
             'reset_token' => null,
             'reset_initiated_at' => null,
             'created_at' => date('Y-m-d H:i:s'),
@@ -572,18 +573,18 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $account = $this->createNewAccountAndAssertIt($accountService);
 
         $updateData = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(60),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(30) . '@dreamlabs.ro',
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(60),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(30) . '@dreamlabs.ro',
             'reset_token' => null,
             'reset_initiated_at' => null,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         );
 
-        $account = $accountService->updateOne($this->generateRandomString(20), $updateData);
+        $account = $accountService->updateOne(GeneralHelperService::generateRandomString(20), $updateData);
 
         $this->assertNull($account);
     }
@@ -595,7 +596,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $newPass = $this->generateRandomString(100);
+        $newPass = GeneralHelperService::generateRandomString(100);
         $account = $accountService->changePassword($account->getApiKey(), $this->data['password'], $newPass);
 
         $this->assertNotNull($account);
@@ -610,7 +611,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $newPass = $this->generateRandomString(100);
+        $newPass = GeneralHelperService::generateRandomString(100);
         $account = $accountService->changePassword($account->getApiKey() . 'invalid', $this->data['password'], $newPass);
 
         $this->assertNull($account);
@@ -625,7 +626,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
 
         $account = $accountService->deactivateAccount($account->getApiKey());
 
-        $newPass = $this->generateRandomString(100);
+        $newPass = GeneralHelperService::generateRandomString(100);
         $account = $accountService->changePassword($account->getApiKey(), $this->data['password'], $newPass);
 
         $this->assertNull($account);
@@ -638,7 +639,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $newPass = $this->generateRandomString(100);
+        $newPass = GeneralHelperService::generateRandomString(100);
         $account = $accountService->changePassword($account->getApiKey(), $this->data['password'] . 'invalid', $newPass);
 
         $this->assertNull($account);
@@ -780,7 +781,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $this->assertNotNull($account);
 
         $oldPassword = $account->getPassword();
-        $newPassword = $this->generateRandomString(10);
+        $newPassword = GeneralHelperService::generateRandomString(10);
         $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken(), $newPassword);
 
         $this->assertNotNull($account);
@@ -799,7 +800,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $account = $accountService->resetPassword($account->getApiKey());
         $this->assertNotNull($account);
 
-        $newPassword = $this->generateRandomString(10);
+        $newPassword = GeneralHelperService::generateRandomString(10);
         $account = $accountService->newPassword($account->getApiKey() . 'invalid', $account->getResetToken(), $newPassword);
 
         $this->assertNull($account);
@@ -815,7 +816,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $account = $accountService->resetPassword($account->getApiKey());
         $this->assertNotNull($account);
 
-        $newPassword = $this->generateRandomString(10);
+        $newPassword = GeneralHelperService::generateRandomString(10);
         $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken() . 'invalid', $newPassword);
 
         $this->assertNull($account);
@@ -832,7 +833,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $this->assertNotNull($account);
 
         $account = $accountService->deactivateAccount($account->getApiKey());
-        $newPassword = $this->generateRandomString(10);
+        $newPassword = GeneralHelperService::generateRandomString(10);
         $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken(), $newPassword);
 
         $this->assertNull($account);
@@ -845,7 +846,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $newPassword = $this->generateRandomString(10);
+        $newPassword = GeneralHelperService::generateRandomString(10);
         $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken(), $newPassword);
 
         $this->assertNull($account);

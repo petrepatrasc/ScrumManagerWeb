@@ -6,6 +6,7 @@ namespace ScrumManager\ApiBundle\Tests\Integration;
 use ScrumManager\ApiBundle\Entity\Email;
 use ScrumManager\ApiBundle\Repository\EmailRepository;
 use ScrumManager\ApiBundle\Service\EmailService;
+use ScrumManager\ApiBundle\Service\GeneralHelperService;
 use Symfony\Component\Validator\Validator;
 
 class EmailServiceTest extends BaseIntegrationTestCase {
@@ -36,10 +37,10 @@ class EmailServiceTest extends BaseIntegrationTestCase {
         $this->validator = static::$kernel->getContainer()->get('validator');
 
         $this->data = array(
-            'sender' => $this->generateRandomString(20),
-            'receiver' => $this->generateRandomString(20),
-            'subject' => $this->generateRandomString(100),
-            'content' => $this->generateRandomString(620),
+            'sender' => GeneralHelperService::generateRandomString(20),
+            'receiver' => GeneralHelperService::generateRandomString(20),
+            'subject' => GeneralHelperService::generateRandomString(100),
+            'content' => GeneralHelperService::generateRandomString(620),
         );
 
         $this->emailService = new EmailService($this->validator, $this->em);
@@ -102,7 +103,7 @@ class EmailServiceTest extends BaseIntegrationTestCase {
      * Test the behaviour of the method for creating a new entry, when the sender is too short.
      */
     public function testCreateOne_SenderTooShort() {
-        $sender = $this->generateRandomString(1);
+        $sender = GeneralHelperService::generateRandomString(1);
         $receiver = $this->data['receiver'];
         $subject = $this->data['subject'];
         $content = $this->data['content'];
@@ -115,7 +116,7 @@ class EmailServiceTest extends BaseIntegrationTestCase {
      * Test the behaviour of the method for creating a new entry, when the sender is too long.
      */
     public function testCreateOne_SenderTooLong() {
-        $sender = $this->generateRandomString(81);
+        $sender = GeneralHelperService::generateRandomString(81);
         $receiver = $this->data['receiver'];
         $subject = $this->data['subject'];
         $content = $this->data['content'];
@@ -155,7 +156,7 @@ class EmailServiceTest extends BaseIntegrationTestCase {
      */
     public function testCreateOne_ReceiverTooShort() {
         $sender = $this->data['sender'];
-        $receiver = $this->generateRandomString(1);
+        $receiver = GeneralHelperService::generateRandomString(1);
         $subject = $this->data['subject'];
         $content = $this->data['content'];
 
@@ -168,7 +169,7 @@ class EmailServiceTest extends BaseIntegrationTestCase {
      */
     public function testCreateOne_ReceiverTooLong() {
         $sender = $this->data['sender'];
-        $receiver = $this->generateRandomString(81);
+        $receiver = GeneralHelperService::generateRandomString(81);
         $subject = $this->data['subject'];
         $content = $this->data['content'];
 
@@ -208,7 +209,7 @@ class EmailServiceTest extends BaseIntegrationTestCase {
     public function testCreateOne_SubjectTooLong() {
         $sender = $this->data['sender'];
         $receiver = $this->data['receiver'];
-        $subject = $this->generateRandomString(181);
+        $subject = GeneralHelperService::generateRandomString(181);
         $content = $this->data['content'];
 
         $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
@@ -467,7 +468,7 @@ class EmailServiceTest extends BaseIntegrationTestCase {
         $content = $this->data['content'];
 
         $email = $this->emailService->createOne($sender, $receiver, $subject, $content);
-        $emailList = $this->emailService->retrieveAllReceivedForAccount($email->getReceiver() . $this->generateRandomString(15));
+        $emailList = $this->emailService->retrieveAllReceivedForAccount($email->getReceiver() . GeneralHelperService::generateRandomString(15));
 
         $this->assertEquals(0, count($emailList));
     }

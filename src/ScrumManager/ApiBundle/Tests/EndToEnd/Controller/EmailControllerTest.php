@@ -7,6 +7,7 @@ use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailCreateFailure;
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailDeleteFailure;
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailReadFailure;
 use ScrumManager\ApiBundle\ResponseCode\Email\ResponseEmailRetrieveFailure;
+use ScrumManager\ApiBundle\Service\GeneralHelperService;
 
 class EmailControllerTest extends BaseFunctionalTestCase {
 
@@ -19,9 +20,9 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['receiver'] = $this->generateRandomString(20);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['receiver'] = GeneralHelperService::generateRandomString(20);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -37,9 +38,9 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['receiver'] = $this->generateRandomString(81);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['receiver'] = GeneralHelperService::generateRandomString(81);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -56,10 +57,10 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['sender'] = $this->generateRandomString(20);
-        $form['receiver'] = $this->generateRandomString(20);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['sender'] = GeneralHelperService::generateRandomString(20);
+        $form['receiver'] = GeneralHelperService::generateRandomString(20);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -75,10 +76,10 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['sender'] = $this->generateRandomString(20);
-        $form['receiver'] = $this->generateRandomString(81);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['sender'] = GeneralHelperService::generateRandomString(20);
+        $form['receiver'] = GeneralHelperService::generateRandomString(81);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -93,9 +94,9 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['receiver'] = $this->generateRandomString(20);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['receiver'] = GeneralHelperService::generateRandomString(20);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -126,9 +127,9 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['receiver'] = $this->generateRandomString(20);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['receiver'] = GeneralHelperService::generateRandomString(20);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -152,9 +153,9 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['receiver'] = $this->generateRandomString(20);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['receiver'] = GeneralHelperService::generateRandomString(20);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -180,9 +181,9 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['receiver'] = $this->generateRandomString(20);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['receiver'] = GeneralHelperService::generateRandomString(20);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -205,9 +206,9 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['receiver'] = $this->generateRandomString(20);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['receiver'] = GeneralHelperService::generateRandomString(20);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -231,9 +232,9 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['receiver'] = $this->generateRandomString(20);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['receiver'] = GeneralHelperService::generateRandomString(20);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -259,9 +260,9 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['receiver'] = $this->generateRandomString(20);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['receiver'] = GeneralHelperService::generateRandomString(20);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -284,9 +285,9 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $form['receiver'] = $this->generateRandomString(20);
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['receiver'] = GeneralHelperService::generateRandomString(20);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -310,10 +311,10 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $receiver = $this->generateRandomString(20);
+        $receiver = GeneralHelperService::generateRandomString(20);
         $form['receiver'] = $receiver;
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -336,10 +337,10 @@ class EmailControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Send email')->form();
 
-        $receiver = $this->generateRandomString(20);
+        $receiver = GeneralHelperService::generateRandomString(20);
         $form['receiver'] = $receiver;
-        $form['subject'] = $this->generateRandomString(80);
-        $form['content'] = $this->generateRandomString(600);
+        $form['subject'] = GeneralHelperService::generateRandomString(80);
+        $form['content'] = GeneralHelperService::generateRandomString(600);
 
         $crawler = $client->submit($form);
 
@@ -350,7 +351,7 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $crawler = $client->request('GET', '/en/api/testscreen/Email/RetrieveAllReceivedForAccount');
 
         $form = $crawler->selectButton('Retrieve email')->form();
-        $form['username'] = $receiver . $this->generateRandomString(15);
+        $form['username'] = $receiver . GeneralHelperService::generateRandomString(15);
 
         $crawler = $client->submit($form);
         $data = $this->assertErrorResponse($client);

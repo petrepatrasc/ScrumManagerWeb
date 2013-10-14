@@ -5,6 +5,7 @@ namespace ScrumManager\ApiBundle\Tests\Unit;
 
 use ScrumManager\ApiBundle\Entity\Email;
 use DateTime;
+use ScrumManager\ApiBundle\Service\GeneralHelperService;
 
 class EmailTest extends BaseUnitTestCase {
 
@@ -12,10 +13,10 @@ class EmailTest extends BaseUnitTestCase {
 
     public function setUp() {
         $this->constructionParameters = array(
-            'sender' => $this->generateRandomString(20),
-            'receiver' => $this->generateRandomString(20),
-            'subject' => $this->generateRandomString(100),
-            'content' => $this->generateRandomString(620),
+            'sender' => GeneralHelperService::generateRandomString(20),
+            'receiver' => GeneralHelperService::generateRandomString(20),
+            'subject' => GeneralHelperService::generateRandomString(100),
+            'content' => GeneralHelperService::generateRandomString(620),
             'read' => false,
             'sent' => false,
             'active' => false

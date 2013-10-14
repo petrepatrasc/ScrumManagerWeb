@@ -5,6 +5,7 @@ namespace ScrumManager\ApiBundle\Tests\EndToEnd;
 use ScrumManager\ApiBundle\ResponseCode\Account\ResponseAccountInvalidCredentials;
 use ScrumManager\ApiBundle\ResponseCode\Account\ResponseAccountNotFound;
 use ScrumManager\ApiBundle\ResponseCode\Account\ResponseAccountRegistrationFailure;
+use ScrumManager\ApiBundle\Service\GeneralHelperService;
 
 class AccountControllerTest extends BaseFunctionalTestCase {
 
@@ -17,11 +18,11 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $form['username'] = $this->generateRandomString(10);
-        $form['password'] = $this->generateRandomString(10);
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['username'] = GeneralHelperService::generateRandomString(10);
+        $form['password'] = GeneralHelperService::generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -37,11 +38,11 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $form['username'] = $this->generateRandomString(10);
-        $form['password'] = $this->generateRandomString(10);
-        $form['email'] = $this->generateRandomString(10);
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['username'] = GeneralHelperService::generateRandomString(10);
+        $form['password'] = GeneralHelperService::generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10);
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -58,11 +59,11 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $form['username'] = $this->generateRandomString(1);
-        $form['password'] = $this->generateRandomString(10);
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['username'] = GeneralHelperService::generateRandomString(1);
+        $form['password'] = GeneralHelperService::generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -79,14 +80,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -113,14 +114,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -148,14 +149,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -183,14 +184,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -209,14 +210,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Update')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
         $form['api_key'] = $apiKey;
 
         $crawler = $client->submit($form);
@@ -233,14 +234,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -254,19 +255,19 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $crawler = $client->submit($form);
         $responseData = $this->assertSuccessfulResponse($client);
 
-        $apiKey = $this->generateRandomString(20);
+        $apiKey = GeneralHelperService::generateRandomString(20);
         $crawler = $client->request('GET', '/en/api/testscreen/Account/UpdateOne');
 
         $form = $crawler->selectButton('Update')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
         $form['api_key'] = $apiKey;
 
         $crawler = $client->submit($form);
@@ -284,14 +285,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -311,7 +312,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $form = $crawler->selectButton('Change Password')->form();
 
         $oldPassword = $password;
-        $newPassword = $this->generateRandomString(60);
+        $newPassword = GeneralHelperService::generateRandomString(60);
 
         $form['old_password'] = $oldPassword;
         $form['new_password'] = $newPassword;
@@ -338,14 +339,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -365,7 +366,7 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $form = $crawler->selectButton('Change Password')->form();
 
         $oldPassword = $password . 'invalid';
-        $newPassword = $this->generateRandomString(60);
+        $newPassword = GeneralHelperService::generateRandomString(60);
 
         $form['old_password'] = $oldPassword;
         $form['new_password'] = $newPassword;
@@ -385,14 +386,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -406,13 +407,13 @@ class AccountControllerTest extends BaseFunctionalTestCase {
         $crawler = $client->submit($form);
         $responseData = $this->assertSuccessfulResponse($client);
 
-        $apiKey = $this->generateRandomString(20);
+        $apiKey = GeneralHelperService::generateRandomString(20);
         $crawler = $client->request('GET', '/en/api/testscreen/Account/ChangePassword');
 
         $form = $crawler->selectButton('Change Password')->form();
 
         $oldPassword = $password;
-        $newPassword = $this->generateRandomString(60);
+        $newPassword = GeneralHelperService::generateRandomString(60);
 
         $form['old_password'] = $oldPassword;
         $form['new_password'] = $newPassword;
@@ -432,14 +433,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
         $this->assertSuccessfulResponse($client);
@@ -461,14 +462,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
         $this->assertSuccessfulResponse($client);
@@ -491,14 +492,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -538,14 +539,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -585,14 +586,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -624,14 +625,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -664,14 +665,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -717,14 +718,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -771,14 +772,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -825,14 +826,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 
@@ -882,14 +883,14 @@ class AccountControllerTest extends BaseFunctionalTestCase {
 
         $form = $crawler->selectButton('Register')->form();
 
-        $username = $this->generateRandomString(10);
-        $password = $this->generateRandomString(10);
+        $username = GeneralHelperService::generateRandomString(10);
+        $password = GeneralHelperService::generateRandomString(10);
 
         $form['username'] = $username;
         $form['password'] = $password;
-        $form['email'] = $this->generateRandomString(10) . '@dreamlabs.ro';
-        $form['first_name'] = $this->generateRandomString(10);
-        $form['last_name'] = $this->generateRandomString(10);
+        $form['email'] = GeneralHelperService::generateRandomString(10) . '@dreamlabs.ro';
+        $form['first_name'] = GeneralHelperService::generateRandomString(10);
+        $form['last_name'] = GeneralHelperService::generateRandomString(10);
 
         $crawler = $client->submit($form);
 

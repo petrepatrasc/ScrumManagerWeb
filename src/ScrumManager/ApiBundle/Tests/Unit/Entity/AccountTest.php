@@ -4,6 +4,7 @@ namespace ScrumManager\ApiBundle\Tests\Unit;
 
 use \DateTime;
 use ScrumManager\ApiBundle\Entity\Account;
+use ScrumManager\ApiBundle\Service\GeneralHelperService;
 
 /**
  * Class containing unit tests for the Account entity.
@@ -17,14 +18,14 @@ class AccountTest extends BaseUnitTestCase {
      */
     public function testMakeFromArray_ValidAllFields() {
         $data = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(128),
-            'seed' => $this->generateRandomString(16),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(120),
-            'api_key' => $this->generateRandomString(128),
-            'reset_token' => $this->generateRandomString(128),
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(128),
+            'seed' => GeneralHelperService::generateRandomString(16),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(120),
+            'api_key' => GeneralHelperService::generateRandomString(128),
+            'reset_token' => GeneralHelperService::generateRandomString(128),
             'reset_initiated_at' => date('Y-m-d H:i:s'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -50,14 +51,14 @@ class AccountTest extends BaseUnitTestCase {
      */
     public function testToArray_ValidAllFields() {
         $data = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(128),
-            'seed' => $this->generateRandomString(16),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(120),
-            'api_key' => $this->generateRandomString(128),
-            'reset_token' => $this->generateRandomString(128),
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(128),
+            'seed' => GeneralHelperService::generateRandomString(16),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(120),
+            'api_key' => GeneralHelperService::generateRandomString(128),
+            'reset_token' => GeneralHelperService::generateRandomString(128),
             'reset_initiated_at' => date('Y-m-d H:i:s'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -97,13 +98,13 @@ class AccountTest extends BaseUnitTestCase {
      */
     public function testMakeFromArray_RetrieveDataInDifferentEntity() {
         $data = array(
-            'username' => $this->generateRandomString(10),
-            'password' => $this->generateRandomString(128),
-            'seed' => $this->generateRandomString(16),
-            'first_name' => $this->generateRandomString(60),
-            'last_name' => $this->generateRandomString(60),
-            'email' => $this->generateRandomString(120),
-            'api_key' => $this->generateRandomString(128),
+            'username' => GeneralHelperService::generateRandomString(10),
+            'password' => GeneralHelperService::generateRandomString(128),
+            'seed' => GeneralHelperService::generateRandomString(16),
+            'first_name' => GeneralHelperService::generateRandomString(60),
+            'last_name' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(120),
+            'api_key' => GeneralHelperService::generateRandomString(128),
             'reset_token' => null,
             'reset_initiated_at' => null,
             'created_at' => date('Y-m-d H:i:s'),
