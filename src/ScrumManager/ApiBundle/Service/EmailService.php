@@ -39,6 +39,35 @@ class EmailService extends BaseService {
     }
 
     /**
+     * Update the details of an email.
+     * @param int $id The ID of the entry which needs to be updated.
+     * @param array $params The parameters with which to update the email.
+     * @return null|Email The entity that has been persisted to the database.
+     */
+    public function updateOne($id, array $params = array()) {
+        // Find entity in database by identifier - if not found, return null.
+        $criteria = array (
+            'id' => $id
+        );
+
+        $email = $this->repo->findOneBy($criteria);
+
+        if ($email === null) {
+            return null;
+        }
+
+        // Update entity and persist it.
+        $emailArray = $this->serializer->normalize($email);
+        $params = array_merge($emailArray, $params);
+        $params['createdAt'] = new \DateTime(strtotime($params['createdAt']['timestamp']));
+        $params['updatedAt'] = new \DateTime(strtotime($params['updatedAt']['timestamp']));
+        $email = $this->serializer->denormalize($params, 'ScrumManager\ApiBundle\Entity\Email');
+
+        $entity = $this->repo->updateOne($email);
+        return $this->serializer->normalize($entity);
+    }
+
+    /**
      * Creates a new email on the server.
      * @param string $sender The username of the sender.
      * @param string $receiver The username of the receiver.
@@ -61,7 +90,8 @@ class EmailService extends BaseService {
             return null;
         }
 
-        return $this->repo->create($email);
+        $entity = $this->repo->create($email);
+        return $this->serializer->normalize($entity);
     }
 
     /**
@@ -81,13 +111,12 @@ class EmailService extends BaseService {
             return null;
         }
 
-        return $email;
+        return $this->serializer->normalize($email);
     }
 
     /**
      * Find all of the active entries in the system.
      * @return array Array containing all of the entries in the system.
-     * @todo Once serialisation procedure is done, make sure to change toArray functionality to something else.
      */
     public function retrieveAllActive() {
         $criteria = array(
@@ -97,7 +126,7 @@ class EmailService extends BaseService {
         $entries = $this->repo->findBy($criteria);
 
         foreach ($entries as $key => $entry) {
-            $entries[$key] = $entry->toArray();
+            $entries[$key] = $this->serializer->normalize($entry);
         }
 
         return $entries;
@@ -117,7 +146,7 @@ class EmailService extends BaseService {
         $entries = $this->repo->findBy($criteria);
 
         foreach ($entries as $key => $entry) {
-            $entries[$key] = $entry->toArray();
+            $entries[$key] = $this->serializer->normalize($entry);
         }
 
         return $entries;
@@ -141,9 +170,9 @@ class EmailService extends BaseService {
         }
 
         $email->setRead(true);
-        $this->repo->updateOne($email);
+        $email = $this->repo->updateOne($email);
 
-        return $email;
+        return $this->serializer->normalize($email);
     }
 
     /**
@@ -164,8 +193,8 @@ class EmailService extends BaseService {
         }
 
         $email->setActive(false);
-        $this->repo->updateOne($email);
+        $email = $this->repo->updateOne($email);
 
-        return $email;
+        return $this->serializer->normalize($email);
     }
 }

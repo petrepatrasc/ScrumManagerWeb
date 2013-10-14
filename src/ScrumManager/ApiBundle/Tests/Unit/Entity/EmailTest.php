@@ -9,18 +9,41 @@ use ScrumManager\ApiBundle\Service\GeneralHelperService;
 
 class EmailTest extends BaseUnitTestCase {
 
-    protected $constructionParameters;
+    /**
+     * @var array
+     */
+    protected $seedData;
 
     public function setUp() {
-        $this->constructionParameters = array(
+        $this->seedData = array(
             'sender' => GeneralHelperService::generateRandomString(20),
             'receiver' => GeneralHelperService::generateRandomString(20),
             'subject' => GeneralHelperService::generateRandomString(100),
             'content' => GeneralHelperService::generateRandomString(620),
             'read' => false,
             'sent' => false,
-            'active' => false
+            'active' => false,
+            'createdAt' => new DateTime('now'),
+            'updatedAt' => new DateTime('now')
         );
+    }
+
+    /**
+     * Assert that all the values match between a normalized array and an entity.
+     * @param array $data The data array which we are checking against.
+     * @param Email $entity The entity which we are checking.
+     */
+    protected function assertAllValuesBetweenArrayAndEntity($data, Email $entity) {
+        $this->assertNotNull($entity);
+        $this->assertEquals($this->seedData['sender'], $entity->getSender());
+        $this->assertEquals($this->seedData['receiver'], $entity->getReceiver());
+        $this->assertEquals($this->seedData['subject'], $entity->getSubject());
+        $this->assertEquals($this->seedData['content'], $entity->getContent());
+        $this->assertEquals($this->seedData['read'], $entity->getRead());
+        $this->assertEquals($this->seedData['sent'], $entity->getSent());
+        $this->assertEquals($this->seedData['active'], $entity->getActive());
+//        $this->assertEquals($this->seedData['createdAt'], $entity->getCreatedAt());
+//        $this->assertEquals($this->seedData['updatedAt'], $entity->getUpdatedAt());
     }
 
     /**
@@ -28,75 +51,24 @@ class EmailTest extends BaseUnitTestCase {
      * method will act accordingly.
      */
     public function testMakeFromArray_Valid() {
-        $email = Email::makeFromArray($this->constructionParameters);
-
+        $email = $this->serializer->denormalize($this->seedData, 'ScrumManager\ApiBundle\Entity\Email');
         $this->assertNotNull($email);
-        $this->assertEquals($this->constructionParameters['sender'], $email->getSender());
-        $this->assertEquals($this->constructionParameters['receiver'], $email->getReceiver());
-        $this->assertEquals($this->constructionParameters['subject'], $email->getSubject());
-        $this->assertEquals($this->constructionParameters['content'], $email->getContent());
-        $this->assertEquals($this->constructionParameters['read'], $email->getRead());
-        $this->assertEquals($this->constructionParameters['sent'], $email->getSent());
-        $this->assertEquals($this->constructionParameters['active'], $email->getActive());
-        $this->assertNotNull($email->getCreatedAt());
-        $this->assertNotNull($email->getUpdatedAt());
+        $this->assertAllValuesBetweenArrayAndEntity($this->seedData, $email);
     }
 
-    /**
-     * Test that when the data that is provided to the make from array is correct, the
-     * method will act accordingly.
-     */
-    public function testMakeFromArray_ValidAlsoWithDateTime() {
-        $this->constructionParameters['created_at'] = date('Y-m-d H:i:s');
-        $this->constructionParameters['updated_at'] = date('Y-m-d H:i:s');
-        $email = Email::makeFromArray($this->constructionParameters);
-
-        $this->assertNotNull($email);
-        $this->assertEquals($this->constructionParameters['sender'], $email->getSender());
-        $this->assertEquals($this->constructionParameters['receiver'], $email->getReceiver());
-        $this->assertEquals($this->constructionParameters['subject'], $email->getSubject());
-        $this->assertEquals($this->constructionParameters['content'], $email->getContent());
-        $this->assertEquals($this->constructionParameters['read'], $email->getRead());
-        $this->assertEquals($this->constructionParameters['sent'], $email->getSent());
-        $this->assertEquals($this->constructionParameters['active'], $email->getActive());
-        $this->assertEquals(new DateTime($this->constructionParameters['created_at']), $email->getCreatedAt());
-        $this->assertEquals(new DateTime($this->constructionParameters['updated_at']), $email->getUpdatedAt());
-    }
 
     /**
      * Test the method of transforming an entity into an array, when the data stored within is valid.
      */
     public function testToArray_Valid() {
-        $email = $this->createNewEntityUsingConstructionParameters($this->constructionParameters);
-        $arrayFromEntity = $email->toArray();
+        $email = $this->createNewEntityUsingConstructionParameters($this->seedData);
+        $arrayFromEntity = $this->serializer->normalize($email);
 
-        $this->assertEquals($this->constructionParameters['sender'], $arrayFromEntity['sender']);
-        $this->assertEquals($this->constructionParameters['receiver'], $arrayFromEntity['receiver']);
-        $this->assertEquals($this->constructionParameters['subject'], $arrayFromEntity['subject']);
-        $this->assertEquals($this->constructionParameters['content'], $arrayFromEntity['content']);
-        $this->assertEquals($this->constructionParameters['read'], $arrayFromEntity['read']);
-        $this->assertEquals($this->constructionParameters['sent'], $arrayFromEntity['sent']);
-        $this->assertEquals($this->constructionParameters['active'], $arrayFromEntity['active']);
-        $this->assertNotNull($email->getCreatedAt());
-        $this->assertNotNull($email->getUpdatedAt());
-    }
+        $arrayFromEntity['createdAt'] = new DateTime(strtotime($arrayFromEntity['createdAt']['timestamp']));
+        $arrayFromEntity['updatedAt'] = new DateTime(strtotime($arrayFromEntity['updatedAt']['timestamp']));
+        unset($arrayFromEntity['id']);
 
-    /**
-     * Test the method of transforming an entity into an array that is safe for API transmission, when the data
-     * stored within is valid.
-     */
-    public function testToSafeArray_Valid() {
-        $email = $this->createNewEntityUsingConstructionParameters($this->constructionParameters);
-        $arrayFromEntity = $email->toSafeArray();
-
-        $this->assertEquals($this->constructionParameters['sender'], $arrayFromEntity['sender']);
-        $this->assertEquals($this->constructionParameters['receiver'], $arrayFromEntity['receiver']);
-        $this->assertEquals($this->constructionParameters['subject'], $arrayFromEntity['subject']);
-        $this->assertEquals($this->constructionParameters['content'], $arrayFromEntity['content']);
-        $this->assertEquals($this->constructionParameters['read'], $arrayFromEntity['read']);
-        $this->assertEquals($this->constructionParameters['sent'], $arrayFromEntity['sent']);
-        $this->assertNotNull($email->getCreatedAt());
-        $this->assertNotNull($email->getUpdatedAt());
+        $this->assertEquals($this->seedData, $arrayFromEntity);
     }
 
     /**
@@ -114,6 +86,8 @@ class EmailTest extends BaseUnitTestCase {
         $email->setSent($constructionParameters['sent']);
         $email->setRead($constructionParameters['read']);
         $email->setActive($constructionParameters['active']);
+        $email->setCreatedAt($constructionParameters['createdAt']);
+        $email->setUpdatedAt($constructionParameters['updatedAt']);
 
         return $email;
     }

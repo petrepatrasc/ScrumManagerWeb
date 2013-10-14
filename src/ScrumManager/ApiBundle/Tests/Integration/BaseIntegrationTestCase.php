@@ -3,7 +3,9 @@
 namespace ScrumManager\ApiBundle\Tests\Integration;
 
 
+use ScrumManager\ApiBundle\Service\GeneralHelperService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Serializer\Serializer;
 
 class BaseIntegrationTestCase extends WebTestCase{
 
@@ -11,6 +13,15 @@ class BaseIntegrationTestCase extends WebTestCase{
      * @var \Doctrine\ORM\EntityManager
      */
     protected $em;
+
+    /**
+     * @var Serializer
+     */
+    protected $serializer;
+
+    public function __construct() {
+        $this->serializer = GeneralHelperService::getDefaultSerializer();
+    }
 
     /**
      * Method to execute before running a test.

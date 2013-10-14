@@ -4,12 +4,14 @@ namespace ScrumManager\ApiBundle\Tests\EndToEnd;
 
 use Doctrine\ORM\EntityManager;
 use ScrumManager\ApiBundle\ResponseCode\System\ResponseSystemSuccess;
+use ScrumManager\ApiBundle\Service\GeneralHelperService;
 use Symfony\Component\HttpKernel\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Bundle\FrameworkBundle\Console\Application as App;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Serializer;
 
 
 class BaseFunctionalTestCase extends WebTestCase {
@@ -18,6 +20,16 @@ class BaseFunctionalTestCase extends WebTestCase {
      * @var EntityManager
      */
     protected $em;
+
+    /**
+     * @var Serializer
+     */
+    protected $serializer;
+
+    public function __construct() {
+        $this->serializer = GeneralHelperService::getDefaultSerializer();
+        $this->client = static::createClient();
+    }
 
     public function setUp() {
         static::$kernel = static::createKernel();

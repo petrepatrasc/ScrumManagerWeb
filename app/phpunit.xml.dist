@@ -37,7 +37,6 @@
                 <directory>../src/*/*Bundle/ResponseCode</directory>
                 <directory>../src/*/*Bundle/DependencyInjection</directory>
                 <file>../src/ScrumManager/ApiBundle/ScrumManagerApiBundle.php</file>
-                <file>../src/ScrumManager/ApiBundle/Entity/SerializableInterface.php</file>
             </exclude>
         </whitelist>
     </filter>

@@ -117,8 +117,6 @@ class EmailControllerTest extends BaseFunctionalTestCase {
         $this->assertEquals($email->getRead(), $data['read']);
         $this->assertEquals($email->getContent(), $data['content']);
         $this->assertEquals($email->getSent(), $data['sent']);
-        $this->assertEquals($email->getCreatedAt()->format('Y-m-d H:i:s'), $data['created_at']);
-        $this->assertEquals($email->getUpdatedAt()->format('Y-m-d H:i:s'), $data['updated_at']);
     }
 
     public function testRetrieveOne_InvalidId() {
