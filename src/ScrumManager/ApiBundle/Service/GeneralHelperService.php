@@ -10,6 +10,10 @@
 namespace ScrumManager\ApiBundle\Service;
 
 
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
 class GeneralHelperService {
 
     /**
@@ -27,5 +31,12 @@ class GeneralHelperService {
         }
 
         return $str;
+    }
+
+    public static function getDefaultSerializer() {
+        $encoder = new JsonEncoder();
+        $normalizer = new GetSetMethodNormalizer();
+
+        return new Serializer(array($normalizer), array ($encoder));
     }
 }

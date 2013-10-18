@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\Tests\Common\Annotations\Ticket\Doctrine\ORM\Mapping\Entity;
 use ScrumManager\ApiBundle\Entity\Account;
 use ScrumManager\ApiBundle\Repository\AccountRepository;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validator;
 use \DateTime;
 
@@ -46,7 +47,7 @@ class AccountService extends BaseService {
      * @return null|Account The account that has been generated.
      */
     public function register(array $params = array()) {
-        $account = Account::makeFromArray($params);
+        $account = $this->serializer->denormalize($params, 'ScrumManager\ApiBundle\Entity\Account');
         $account = $this->setGenerationData($account);
 
         // Validate data and if it is incorrect, return null.
@@ -56,7 +57,8 @@ class AccountService extends BaseService {
             return null;
         }
 
-        return $this->repo->create($account);
+        $entity = $this->repo->create($account);
+        return $this->serializer->normalize($entity);
     }
 
     /**
@@ -74,7 +76,8 @@ class AccountService extends BaseService {
 
         $seed = $accountWithSeed->getSeed();
 
-        return $this->repo->findByUsernameAndPassword($username, $password, $seed);
+        $entity = $this->repo->findByUsernameAndPassword($username, $password, $seed);
+        return $this->serializer->normalize($entity);
     }
 
     /**
@@ -97,9 +100,14 @@ class AccountService extends BaseService {
         }
 
         // Update entity and persist it.
-        $account = Account::makeFromArray($params, $account);
+        $accountArray = $this->serializer->normalize($account);
+        $accountArray['createdAt'] = new DateTime(strtotime($accountArray['createdAt']['timestamp']));
+        $accountArray['updatedAt'] = new DateTime(strtotime($accountArray['updatedAt']['timestamp']));
+        $params = array_merge($accountArray, $params);
+        $account = $this->serializer->denormalize($params, 'ScrumManager\ApiBundle\Entity\Account');
 
-        return $this->repo->updateOne($account);
+        $entity = $this->repo->updateOne($account);
+        return $this->serializer->normalize($entity);
     }
 
     /**
@@ -163,7 +171,8 @@ class AccountService extends BaseService {
 
         if ($encryptedPassword === hash('sha512', $seed . $oldPassword)) {
             $account = $this->encryptPassword($account, $newPassword);
-            return $this->repo->updateOne($account);
+            $entity = $this->repo->updateOne($account);
+            return $this->serializer->normalize($entity);
         }
 
         return null;
@@ -187,7 +196,7 @@ class AccountService extends BaseService {
             return null;
         }
 
-        return $account;
+        return $this->serializer->normalize($account);
     }
 
     /**
@@ -209,7 +218,9 @@ class AccountService extends BaseService {
         }
 
         $account->setActive(false);
-        return $this->repo->updateOne($account);
+        $entity = $this->repo->updateOne($account);
+
+        return $this->serializer->normalize($entity);
     }
 
     /**
@@ -233,7 +244,9 @@ class AccountService extends BaseService {
 
         $account = $this->generateResetDetails($account);
 
-        return $this->repo->updateOne($account);
+        $entity = $this->repo->updateOne($account);
+
+        return $this->serializer->normalize($entity);
     }
 
     /**
@@ -278,6 +291,7 @@ class AccountService extends BaseService {
         $account->setResetToken(null);
         $account->setResetInitiatedAt(null);
 
-        return $this->repo->updateOne($account);
+        $entity = $this->repo->updateOne($account);
+        return $this->serializer->normalize($entity);
     }
 }

@@ -10,15 +10,22 @@
 namespace ScrumManager\ApiBundle\Service;
 
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 
 class BaseService {
+
+    protected $serializer;
 
     /**
      * Base constructor that gets called for all of the service classes.
      */
     public function __construct(EntityManager $em) {
         $this->em = $em;
+
+        $this->serializer = GeneralHelperService::getDefaultSerializer();
     }
 
     /**

@@ -13,6 +13,7 @@
         "php": ">=5.3.3",
         "satooshi/php-coveralls": "dev-master",
         "symfony/symfony": "2.3.*",
+        "symfony/serializer": "2.3.*",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.2.*",
         "doctrine/migrations": "dev-master",

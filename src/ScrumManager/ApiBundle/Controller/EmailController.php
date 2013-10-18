@@ -63,7 +63,7 @@ class EmailController extends Controller {
         $email = $this->get('email.service')->retrieveOne($id);
 
         if ($email) {
-            return $this->get('json.service')->sucessResponse($email->toArray());
+            return $this->get('json.service')->sucessResponse($email);
         }
 
         return $this->get('json.service')->errorResponse(new ResponseEmailRetrieveFailure());

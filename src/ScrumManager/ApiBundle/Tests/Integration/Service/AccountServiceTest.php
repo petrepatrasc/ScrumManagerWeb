@@ -26,23 +26,24 @@ class AccountServiceTest extends BaseIntegrationTestCase {
     /**
      * @var array
      */
-    protected $data;
+    protected $seedData;
 
     public function setUp() {
         parent::setUp();
         $this->repo = $this->em->getRepository('ScrumManagerApiBundle:Account');
         $this->validator = static::$kernel->getContainer()->get('validator');
 
-        $this->data = array(
+        $this->seedData = array(
             'username' => GeneralHelperService::generateRandomString(10),
-            'password' => hash('sha256', GeneralHelperService::generateRandomString(60)),
-            'first_name' => GeneralHelperService::generateRandomString(60),
-            'last_name' => GeneralHelperService::generateRandomString(60),
-            'email' => GeneralHelperService::generateRandomString(30) . '@dreamlabs.ro',
-            'reset_token' => null,
-            'reset_initiated_at' => null,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'password' => GeneralHelperService::generateRandomString(128),
+            'firstName' => GeneralHelperService::generateRandomString(60),
+            'lastName' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(108) . '@dreamlabs.ro',
+            'apiKey' => GeneralHelperService::generateRandomString(128),
+            'resetToken' => null,
+            'resetInitiatedAt' => null,
+            'createdAt' => new DateTime('now'),
+            'updatedAt' => new DateTime('now')
         );
     }
 
@@ -50,7 +51,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         parent::tearDown();
         unset($this->repo);
         unset($this->validator);
-        unset($this->data);
+        unset($this->seedData);
     }
 
     /**
@@ -60,16 +61,16 @@ class AccountServiceTest extends BaseIntegrationTestCase {
     public function testRegister_Valid() {
         $accountService = new AccountService($this->validator, $this->em);
 
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
-        $this->assertNotNull($account->getId());
-        $this->assertEquals($this->data['username'], $account->getUsername());
-        $this->assertNotEquals($this->data['password'], $account->getPassword());
-        $this->assertEquals($this->data['first_name'], $account->getFirstName());
-        $this->assertEquals($this->data['last_name'], $account->getLastName());
-        $this->assertEquals($this->data['email'], $account->getEmail());
-        $this->assertNull($account->getResetToken());
-        $this->assertNull($account->getResetInitiatedAt());
+        $this->assertNotNull($account['id']);
+        $this->assertEquals($this->seedData['username'], $account['username']);
+        $this->assertNotEquals($this->seedData['password'], $account['password']);
+        $this->assertEquals($this->seedData['firstName'], $account['firstName']);
+        $this->assertEquals($this->seedData['lastName'], $account['lastName']);
+        $this->assertEquals($this->seedData['email'], $account['email']);
+        $this->assertNull($account['resetToken']);
+        $this->assertNull($account['resetInitiatedAt']);
     }
 
     /**
@@ -78,17 +79,17 @@ class AccountServiceTest extends BaseIntegrationTestCase {
     public function testRegister_UsernameUnique() {
         $accountService = new AccountService($this->validator, $this->em);
 
-        $firstAccount = $accountService->register($this->data);
-        $secondAccount = $accountService->register($this->data);
+        $firstAccount = $accountService->register($this->seedData);
+        $secondAccount = $accountService->register($this->seedData);
 
-        $this->assertNotNull($firstAccount->getId());
-        $this->assertEquals($this->data['username'], $firstAccount->getUsername());
-        $this->assertNotEquals($this->data['password'], $firstAccount->getPassword());
-        $this->assertEquals($this->data['first_name'], $firstAccount->getFirstName());
-        $this->assertEquals($this->data['last_name'], $firstAccount->getLastName());
-        $this->assertEquals($this->data['email'], $firstAccount->getEmail());
-        $this->assertNull($firstAccount->getResetToken());
-        $this->assertNull($firstAccount->getResetInitiatedAt());
+        $this->assertNotNull($firstAccount['id']);
+        $this->assertEquals($this->seedData['username'], $firstAccount['username']);
+        $this->assertNotEquals($this->seedData['password'], $firstAccount['password']);
+        $this->assertEquals($this->seedData['firstName'], $firstAccount['firstName']);
+        $this->assertEquals($this->seedData['lastName'], $firstAccount['lastName']);
+        $this->assertEquals($this->seedData['email'], $firstAccount['email']);
+        $this->assertNull($firstAccount['resetToken']);
+        $this->assertNull($firstAccount['resetInitiatedAt']);
 
         $this->assertNull($secondAccount);
     }
@@ -97,10 +98,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the username is null.
      */
     public function testRegister_UsernameNull() {
-        $this->data['username'] = null;
+        $this->seedData['username'] = null;
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -109,10 +110,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the username is blank.
      */
     public function testRegister_UsernameBlank() {
-        $this->data['username'] = '';
+        $this->seedData['username'] = '';
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -121,10 +122,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the username is integer.
      */
     public function testRegister_UsernameIsInteger() {
-        $this->data['username'] = 1;
+        $this->seedData['username'] = 1;
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -133,10 +134,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the username is too small.
      */
     public function testRegister_UsernameIsTooSmall() {
-        $this->data['username'] = 'x';
+        $this->seedData['username'] = 'x';
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -145,10 +146,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the username is too long..
      */
     public function testRegister_UsernameIsTooLarge() {
-        $this->data['username'] = GeneralHelperService::generateRandomString(81);
+        $this->seedData['username'] = GeneralHelperService::generateRandomString(81);
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -157,10 +158,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the username is unset..
      */
     public function testRegister_UsernameUnset() {
-        unset($this->data['username']);
+        unset($this->seedData['username']);
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -169,30 +170,30 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the password is not set.
      */
     public function testRegister_PasswordIsNotSet() {
-        unset($this->data['password']);
+        unset($this->seedData['password']);
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
-        $this->assertNotNull($account->getId());
-        $this->assertEquals($this->data['username'], $account->getUsername());
-        $this->assertNotNull($account->getPassword());
-        $this->assertNotEquals($account->getPassword(), hash('sha512', $account->getSeed()));
-        $this->assertEquals($this->data['first_name'], $account->getFirstName());
-        $this->assertEquals($this->data['last_name'], $account->getLastName());
-        $this->assertEquals($this->data['email'], $account->getEmail());
-        $this->assertNull($account->getResetToken());
-        $this->assertNull($account->getResetInitiatedAt());
+        $this->assertNotNull($account['id']);
+        $this->assertEquals($this->seedData['username'], $account['username']);
+        $this->assertNotNull($account['password']);
+        $this->assertNotEquals($account['password'], hash('sha512', $account['seed']));
+        $this->assertEquals($this->seedData['firstName'], $account['firstName']);
+        $this->assertEquals($this->seedData['lastName'], $account['lastName']);
+        $this->assertEquals($this->seedData['email'], $account['email']);
+        $this->assertNull($account['resetToken']);
+        $this->assertNull($account['resetInitiatedAt']);
     }
 
     /**
      * Test the register action when the email is not in a valid format.
      */
     public function testRegister_EmailIsNotValid() {
-        $this->data['email'] = 'invalid.com';
+        $this->seedData['email'] = 'invalid.com';
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -201,10 +202,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the email is not in unset.
      */
     public function testRegister_EmailIsUnset() {
-        unset($this->data['email']);
+        unset($this->seedData['email']);
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -213,10 +214,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the email is blank.
      */
     public function testRegister_EmailIsBlank() {
-        $this->data['email'] = '';
+        $this->seedData['email'] = '';
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -225,10 +226,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the email is null.
      */
     public function testRegister_EmailIsNull() {
-        $this->data['email'] = null;
+        $this->seedData['email'] = null;
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -237,10 +238,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the email is an integer.
      */
     public function testRegister_EmailIsInteger() {
-        $this->data['email'] = 3;
+        $this->seedData['email'] = 3;
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -249,10 +250,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the email is too short.
      */
     public function testRegister_EmailIsTooShort() {
-        $this->data['email'] = 't@a.com';
+        $this->seedData['email'] = 't@a.com';
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -261,10 +262,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the email is too long.
      */
     public function testRegister_EmailIsTooLong() {
-        $this->data['email'] = GeneralHelperService::generateRandomString(168) . '@dreamlabs.ro';
+        $this->seedData['email'] = GeneralHelperService::generateRandomString(168) . '@dreamlabs.ro';
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -273,10 +274,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the first name is blank.
      */
     public function testRegister_FirstNameIsBlank() {
-        $this->data['first_name'] = '';
+        $this->seedData['firstName'] = '';
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -285,10 +286,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the first name is null.
      */
     public function testRegister_FirstNameIsNull() {
-        $this->data['first_name'] = null;
+        $this->seedData['firstName'] = null;
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -297,10 +298,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the first name is not of a valid type.
      */
     public function testRegister_FirstNameIsInteger() {
-        $this->data['first_name'] = 100;
+        $this->seedData['firstName'] = 100;
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -309,10 +310,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the first name is unset.
      */
     public function testRegister_FirstNameIsUnset() {
-        unset($this->data['first_name']);
+        unset($this->seedData['firstName']);
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -321,10 +322,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the first name is too long.
      */
     public function testRegister_FirstNameIsTooLong() {
-        $this->data['first_name'] = GeneralHelperService::generateRandomString(81);
+        $this->seedData['firstName'] = GeneralHelperService::generateRandomString(81);
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -333,10 +334,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the last name is blank.
      */
     public function testRegister_LastNameIsBlank() {
-        $this->data['last_name'] = '';
+        $this->seedData['lastName'] = '';
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -345,10 +346,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the last name is null.
      */
     public function testRegister_LastNameIsNull() {
-        $this->data['last_name'] = null;
+        $this->seedData['lastName'] = null;
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -357,10 +358,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the last name is not of a valid type.
      */
     public function testRegister_LastNameIsInteger() {
-        $this->data['last_name'] = 100;
+        $this->seedData['lastName'] = 100;
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -369,10 +370,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the last name is unset.
      */
     public function testRegister_LastNameIsUnset() {
-        unset($this->data['last_name']);
+        unset($this->seedData['lastName']);
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
@@ -381,52 +382,52 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * Test the register action when the last name is too long.
      */
     public function testRegister_LastNameIsTooLong() {
-        $this->data['last_name'] = GeneralHelperService::generateRandomString(81);
+        $this->seedData['lastName'] = GeneralHelperService::generateRandomString(81);
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
         $this->assertNull($account);
     }
 
     /**
-     * Test the register action when the created_at field is missing.
+     * Test the register action when the createdAt field is missing.
      */
     public function testRegister_CreatedAtIsNotSet() {
-        unset($this->data['created_at']);
+        unset($this->seedData['createdAt']);
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
-        $this->assertNotNull($account->getId());
-        $this->assertEquals($this->data['username'], $account->getUsername());
-        $this->assertNotEquals($this->data['password'], $account->getPassword());
-        $this->assertEquals($this->data['first_name'], $account->getFirstName());
-        $this->assertEquals($this->data['last_name'], $account->getLastName());
-        $this->assertEquals($this->data['email'], $account->getEmail());
-        $this->assertNull($account->getResetToken());
-        $this->assertNull($account->getResetInitiatedAt());
-        $this->assertNotNull($account->getCreatedAt());
+        $this->assertNotNull($account['id']);
+        $this->assertEquals($this->seedData['username'], $account['username']);
+        $this->assertNotEquals($this->seedData['password'], $account['password']);
+        $this->assertEquals($this->seedData['firstName'], $account['firstName']);
+        $this->assertEquals($this->seedData['lastName'], $account['lastName']);
+        $this->assertEquals($this->seedData['email'], $account['email']);
+        $this->assertNull($account['resetToken']);
+        $this->assertNull($account['resetInitiatedAt']);
+        $this->assertNotNull($account['createdAt']);
     }
 
     /**
-     * Test the register action when the updated_at field is missing.
+     * Test the register action when the updatedAt field is missing.
      */
     public function testRegister_UpdatedAtIsNotSet() {
-        unset($this->data['updated_at']);
+        unset($this->seedData['updatedAt']);
 
         $accountService = new AccountService($this->validator, $this->em);
-        $account = $accountService->register($this->data);
+        $account = $accountService->register($this->seedData);
 
-        $this->assertNotNull($account->getId());
-        $this->assertEquals($this->data['username'], $account->getUsername());
-        $this->assertNotEquals($this->data['password'], $account->getPassword());
-        $this->assertEquals($this->data['first_name'], $account->getFirstName());
-        $this->assertEquals($this->data['last_name'], $account->getLastName());
-        $this->assertEquals($this->data['email'], $account->getEmail());
-        $this->assertNull($account->getResetToken());
-        $this->assertNull($account->getResetInitiatedAt());
-        $this->assertNotNull($account->getUpdatedAt());
+        $this->assertNotNull($account['id']);
+        $this->assertEquals($this->seedData['username'], $account['username']);
+        $this->assertNotEquals($this->seedData['password'], $account['password']);
+        $this->assertEquals($this->seedData['firstName'], $account['firstName']);
+        $this->assertEquals($this->seedData['lastName'], $account['lastName']);
+        $this->assertEquals($this->seedData['email'], $account['email']);
+        $this->assertNull($account['resetToken']);
+        $this->assertNull($account['resetInitiatedAt']);
+        $this->assertNotNull($account['updatedAt']);
     }
 
     /**
@@ -435,16 +436,16 @@ class AccountServiceTest extends BaseIntegrationTestCase {
      * @return Account Account entity that was created.
      */
     protected function createNewAccountAndAssertIt(AccountService $service) {
-        $account = $service->register($this->data);
+        $account = $service->register($this->seedData);
 
-        $this->assertNotNull($account->getId());
-        $this->assertEquals($this->data['username'], $account->getUsername());
-        $this->assertNotEquals($this->data['password'], $account->getPassword());
-        $this->assertEquals($this->data['first_name'], $account->getFirstName());
-        $this->assertEquals($this->data['last_name'], $account->getLastName());
-        $this->assertEquals($this->data['email'], $account->getEmail());
-        $this->assertNull($account->getResetToken());
-        $this->assertNull($account->getResetInitiatedAt());
+        $this->assertNotNull($account['id']);
+        $this->assertEquals($this->seedData['username'], $account['username']);
+        $this->assertNotEquals($this->seedData['password'], $account['password']);
+        $this->assertEquals($this->seedData['firstName'], $account['firstName']);
+        $this->assertEquals($this->seedData['lastName'], $account['lastName']);
+        $this->assertEquals($this->seedData['email'], $account['email']);
+        $this->assertNull($account['resetToken']);
+        $this->assertNull($account['resetInitiatedAt']);
 
         return $account;
     }
@@ -456,17 +457,17 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $accountLogin = $accountService->login($this->data['username'], $this->data['password']);
+        $accountLogin = $accountService->login($this->seedData['username'], $this->seedData['password']);
 
         $this->assertNotNull($accountLogin);
-        $this->assertNotNull($accountLogin->getId());
-        $this->assertEquals($this->data['username'], $accountLogin->getUsername());
-        $this->assertNotEquals($this->data['password'], $accountLogin->getPassword());
-        $this->assertEquals($this->data['first_name'], $accountLogin->getFirstName());
-        $this->assertEquals($this->data['last_name'], $accountLogin->getLastName());
-        $this->assertEquals($this->data['email'], $accountLogin->getEmail());
-        $this->assertNull($accountLogin->getResetToken());
-        $this->assertNull($accountLogin->getResetInitiatedAt());
+        $this->assertNotNull($accountLogin['id']);
+        $this->assertEquals($this->seedData['username'], $accountLogin['username']);
+        $this->assertNotEquals($this->seedData['password'], $accountLogin['password']);
+        $this->assertEquals($this->seedData['firstName'], $accountLogin['firstName']);
+        $this->assertEquals($this->seedData['lastName'], $accountLogin['lastName']);
+        $this->assertEquals($this->seedData['email'], $accountLogin['email']);
+        $this->assertNull($accountLogin['resetToken']);
+        $this->assertNull($accountLogin['resetInitiatedAt']);
     }
 
     /**
@@ -476,7 +477,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $accountLogin = $accountService->login($this->data['username'] . 'invalid', $this->data['password']);
+        $accountLogin = $accountService->login($this->seedData['username'] . 'invalid', $this->seedData['password']);
 
         $this->assertNull($accountLogin);
     }
@@ -488,7 +489,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $accountLogin = $accountService->login($this->data['username'], $this->data['password'] . 'invalid');
+        $accountLogin = $accountService->login($this->seedData['username'], $this->seedData['password'] . 'invalid');
 
         $this->assertNull($accountLogin);
     }
@@ -500,9 +501,9 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->deactivateAccount($account->getApiKey());
+        $account = $accountService->deactivateAccount($account['apiKey']);
 
-        $accountLogin = $accountService->login($this->data['username'], $this->data['password']);
+        $accountLogin = $accountService->login($this->seedData['username'], $this->seedData['password']);
 
         $this->assertNull($accountLogin);
     }
@@ -517,27 +518,27 @@ class AccountServiceTest extends BaseIntegrationTestCase {
 
         $updateData = array(
             'username' => GeneralHelperService::generateRandomString(10),
-            'password' => GeneralHelperService::generateRandomString(60),
-            'first_name' => GeneralHelperService::generateRandomString(60),
-            'last_name' => GeneralHelperService::generateRandomString(60),
-            'email' => GeneralHelperService::generateRandomString(30) . '@dreamlabs.ro',
-            'reset_token' => null,
-            'reset_initiated_at' => null,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'password' => GeneralHelperService::generateRandomString(128),
+            'firstName' => GeneralHelperService::generateRandomString(60),
+            'lastName' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(108) . '@dreamlabs.ro',
+            'resetToken' => null,
+            'resetInitiatedAt' => null,
+            'createdAt' => new DateTime('now'),
+            'updatedAt' => new DateTime('now')
         );
 
-        $account = $accountService->updateOne($account->getApiKey(), $updateData);
+        $account = $accountService->updateOne($account['apiKey'], $updateData);
 
         $this->assertNotNull($account);
-        $this->assertNotNull($account->getId());
-        $this->assertEquals($updateData['username'], $account->getUsername());
-        $this->assertNotEquals(hash('sha512', $account->getSeed() . $updateData['password']), $account->getPassword());
-        $this->assertEquals($updateData['first_name'], $account->getFirstName());
-        $this->assertEquals($updateData['last_name'], $account->getLastName());
-        $this->assertEquals($updateData['email'], $account->getEmail());
-        $this->assertNull($account->getResetToken());
-        $this->assertNull($account->getResetInitiatedAt());
+        $this->assertNotNull($account['id']);
+        $this->assertEquals($updateData['username'], $account['username']);
+        $this->assertNotEquals(hash('sha512', $account['seed'] . $updateData['password']), $account['password']);
+        $this->assertEquals($updateData['firstName'], $account['firstName']);
+        $this->assertEquals($updateData['lastName'], $account['lastName']);
+        $this->assertEquals($updateData['email'], $account['email']);
+        $this->assertNull($account['resetToken']);
+        $this->assertNull($account['resetInitiatedAt']);
     }
 
     /**
@@ -549,18 +550,18 @@ class AccountServiceTest extends BaseIntegrationTestCase {
 
         $updateData = array(
             'username' => GeneralHelperService::generateRandomString(10),
-            'password' => GeneralHelperService::generateRandomString(60),
-            'first_name' => GeneralHelperService::generateRandomString(60),
-            'last_name' => GeneralHelperService::generateRandomString(60),
-            'email' => GeneralHelperService::generateRandomString(30) . '@dreamlabs.ro',
-            'reset_token' => null,
-            'reset_initiated_at' => null,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'password' => GeneralHelperService::generateRandomString(128),
+            'firstName' => GeneralHelperService::generateRandomString(60),
+            'lastName' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(108) . '@dreamlabs.ro',
+            'resetToken' => null,
+            'resetInitiatedAt' => null,
+            'createdAt' => new DateTime('now'),
+            'updatedAt' => new DateTime('now')
         );
 
-        $account = $accountService->deactivateAccount($account->getApiKey());
-        $account = $accountService->updateOne($account->getApiKey(), $updateData);
+        $account = $accountService->deactivateAccount($account['apiKey']);
+        $account = $accountService->updateOne($account['apiKey'], $updateData);
 
         $this->assertNull($account);
     }
@@ -574,14 +575,14 @@ class AccountServiceTest extends BaseIntegrationTestCase {
 
         $updateData = array(
             'username' => GeneralHelperService::generateRandomString(10),
-            'password' => GeneralHelperService::generateRandomString(60),
-            'first_name' => GeneralHelperService::generateRandomString(60),
-            'last_name' => GeneralHelperService::generateRandomString(60),
-            'email' => GeneralHelperService::generateRandomString(30) . '@dreamlabs.ro',
-            'reset_token' => null,
-            'reset_initiated_at' => null,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'password' => GeneralHelperService::generateRandomString(128),
+            'firstName' => GeneralHelperService::generateRandomString(60),
+            'lastName' => GeneralHelperService::generateRandomString(60),
+            'email' => GeneralHelperService::generateRandomString(108) . '@dreamlabs.ro',
+            'resetToken' => null,
+            'resetInitiatedAt' => null,
+            'createdAt' => new DateTime('now'),
+            'updatedAt' => new DateTime('now')
         );
 
         $account = $accountService->updateOne(GeneralHelperService::generateRandomString(20), $updateData);
@@ -597,11 +598,11 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $account = $this->createNewAccountAndAssertIt($accountService);
 
         $newPass = GeneralHelperService::generateRandomString(100);
-        $account = $accountService->changePassword($account->getApiKey(), $this->data['password'], $newPass);
+        $account = $accountService->changePassword($account['apiKey'], $this->seedData['password'], $newPass);
 
         $this->assertNotNull($account);
-        $this->assertNotEquals($account->getPassword(), hash('sha512', $account->getSeed() . $this->data['password']));
-        $this->assertEquals($account->getPassword(), hash('sha512', $account->getSeed() . $newPass));
+        $this->assertNotEquals($account['password'], hash('sha512', $account['seed'] . $this->seedData['password']));
+        $this->assertEquals($account['password'], hash('sha512', $account['seed'] . $newPass));
     }
 
     /**
@@ -612,7 +613,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $account = $this->createNewAccountAndAssertIt($accountService);
 
         $newPass = GeneralHelperService::generateRandomString(100);
-        $account = $accountService->changePassword($account->getApiKey() . 'invalid', $this->data['password'], $newPass);
+        $account = $accountService->changePassword($account['apiKey'] . 'invalid', $this->seedData['password'], $newPass);
 
         $this->assertNull($account);
     }
@@ -624,10 +625,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->deactivateAccount($account->getApiKey());
+        $account = $accountService->deactivateAccount($account['apiKey']);
 
         $newPass = GeneralHelperService::generateRandomString(100);
-        $account = $accountService->changePassword($account->getApiKey(), $this->data['password'], $newPass);
+        $account = $accountService->changePassword($account['apiKey'], $this->seedData['password'], $newPass);
 
         $this->assertNull($account);
     }
@@ -640,7 +641,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $account = $this->createNewAccountAndAssertIt($accountService);
 
         $newPass = GeneralHelperService::generateRandomString(100);
-        $account = $accountService->changePassword($account->getApiKey(), $this->data['password'] . 'invalid', $newPass);
+        $account = $accountService->changePassword($account['apiKey'], $this->seedData['password'] . 'invalid', $newPass);
 
         $this->assertNull($account);
     }
@@ -652,16 +653,16 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $retrievedAccount = $accountService->retrieveOne($account->getUsername());
+        $retrievedAccount = $accountService->retrieveOne($account['username']);
 
         $this->assertNotNull($retrievedAccount);
-        $this->assertNotNull($retrievedAccount->getId());
-        $this->assertEquals($this->data['username'], $retrievedAccount->getUsername());
-        $this->assertEquals($this->data['first_name'], $retrievedAccount->getFirstName());
-        $this->assertEquals($this->data['last_name'], $retrievedAccount->getLastName());
-        $this->assertEquals($this->data['email'], $retrievedAccount->getEmail());
-        $this->assertNull($retrievedAccount->getResetToken());
-        $this->assertNull($retrievedAccount->getResetInitiatedAt());
+        $this->assertNotNull($retrievedAccount['id']);
+        $this->assertEquals($this->seedData['username'], $retrievedAccount['username']);
+        $this->assertEquals($this->seedData['firstName'], $retrievedAccount['firstName']);
+        $this->assertEquals($this->seedData['lastName'], $retrievedAccount['lastName']);
+        $this->assertEquals($this->seedData['email'], $retrievedAccount['email']);
+        $this->assertNull($retrievedAccount['resetToken']);
+        $this->assertNull($retrievedAccount['resetInitiatedAt']);
     }
 
     /**
@@ -671,7 +672,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $retrievedAccount = $accountService->retrieveOne($account->getUsername() . 'invalid');
+        $retrievedAccount = $accountService->retrieveOne($account['username'] . 'invalid');
 
         $this->assertNull($retrievedAccount);
     }
@@ -683,9 +684,9 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->deactivateAccount($account->getApiKey());
+        $account = $accountService->deactivateAccount($account['apiKey']);
 
-        $retrievedAccount = $accountService->retrieveOne($account->getUsername());
+        $retrievedAccount = $accountService->retrieveOne($account['username']);
 
         $this->assertNull($retrievedAccount);
     }
@@ -697,10 +698,10 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $retrievedAccount = $accountService->deactivateAccount($account->getApiKey());
+        $retrievedAccount = $accountService->deactivateAccount($account['apiKey']);
 
         $this->assertNotNull($retrievedAccount);
-        $this->assertFalse($retrievedAccount->getActive());
+        $this->assertFalse($retrievedAccount['active']);
     }
 
     /**
@@ -710,7 +711,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $retrievedAccount = $accountService->deactivateAccount($account->getApiKey() . 'invalid');
+        $retrievedAccount = $accountService->deactivateAccount($account['apiKey'] . 'invalid');
 
         $this->assertNull($retrievedAccount);
     }
@@ -722,12 +723,12 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $retrievedAccount = $accountService->deactivateAccount($account->getApiKey());
+        $retrievedAccount = $accountService->deactivateAccount($account['apiKey']);
 
         $this->assertNotNull($retrievedAccount);
-        $this->assertFalse($retrievedAccount->getActive());
+        $this->assertFalse($retrievedAccount['active']);
 
-        $retrievedAccount = $accountService->deactivateAccount($account->getApiKey());
+        $retrievedAccount = $accountService->deactivateAccount($account['apiKey']);
         $this->assertNull($retrievedAccount);
     }
 
@@ -738,11 +739,11 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->resetPassword($account->getApiKey());
+        $account = $accountService->resetPassword($account['apiKey']);
 
         $this->assertNotNull($account);
-        $this->assertNotNull($account->getResetToken());
-        $this->assertNotNull($account->getResetInitiatedAt());
+        $this->assertNotNull($account['resetToken']);
+        $this->assertNotNull($account['resetInitiatedAt']);
     }
 
     /**
@@ -752,7 +753,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->resetPassword($account->getApiKey() . 'invalid');
+        $account = $accountService->resetPassword($account['apiKey'] . 'invalid');
 
         $this->assertNull($account);
     }
@@ -764,8 +765,8 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->deactivateAccount($account->getApiKey());
-        $account = $accountService->resetPassword($account->getApiKey());
+        $account = $accountService->deactivateAccount($account['apiKey']);
+        $account = $accountService->resetPassword($account['apiKey']);
 
         $this->assertNull($account);
     }
@@ -777,17 +778,17 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->resetPassword($account->getApiKey());
+        $account = $accountService->resetPassword($account['apiKey']);
         $this->assertNotNull($account);
 
-        $oldPassword = $account->getPassword();
+        $oldPassword = $account['password'];
         $newPassword = GeneralHelperService::generateRandomString(10);
-        $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken(), $newPassword);
+        $account = $accountService->newPassword($account['apiKey'], $account['resetToken'], $newPassword);
 
         $this->assertNotNull($account);
-        $this->assertNull($account->getResetInitiatedAt());
-        $this->assertNull($account->getResetToken());
-        $this->assertNotEquals($oldPassword, $account->getPassword());
+        $this->assertNull($account['resetInitiatedAt']);
+        $this->assertNull($account['resetToken']);
+        $this->assertNotEquals($oldPassword, $account['password']);
     }
 
     /**
@@ -797,11 +798,11 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->resetPassword($account->getApiKey());
+        $account = $accountService->resetPassword($account['apiKey']);
         $this->assertNotNull($account);
 
         $newPassword = GeneralHelperService::generateRandomString(10);
-        $account = $accountService->newPassword($account->getApiKey() . 'invalid', $account->getResetToken(), $newPassword);
+        $account = $accountService->newPassword($account['apiKey'] . 'invalid', $account['resetToken'], $newPassword);
 
         $this->assertNull($account);
     }
@@ -813,11 +814,11 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->resetPassword($account->getApiKey());
+        $account = $accountService->resetPassword($account['apiKey']);
         $this->assertNotNull($account);
 
         $newPassword = GeneralHelperService::generateRandomString(10);
-        $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken() . 'invalid', $newPassword);
+        $account = $accountService->newPassword($account['apiKey'], $account['resetToken'] . 'invalid', $newPassword);
 
         $this->assertNull($account);
     }
@@ -829,12 +830,12 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $accountService = new AccountService($this->validator, $this->em);
         $account = $this->createNewAccountAndAssertIt($accountService);
 
-        $account = $accountService->resetPassword($account->getApiKey());
+        $account = $accountService->resetPassword($account['apiKey']);
         $this->assertNotNull($account);
 
-        $account = $accountService->deactivateAccount($account->getApiKey());
+        $account = $accountService->deactivateAccount($account['apiKey']);
         $newPassword = GeneralHelperService::generateRandomString(10);
-        $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken(), $newPassword);
+        $account = $accountService->newPassword($account['apiKey'], $account['resetToken'], $newPassword);
 
         $this->assertNull($account);
     }
@@ -847,7 +848,7 @@ class AccountServiceTest extends BaseIntegrationTestCase {
         $account = $this->createNewAccountAndAssertIt($accountService);
 
         $newPassword = GeneralHelperService::generateRandomString(10);
-        $account = $accountService->newPassword($account->getApiKey(), $account->getResetToken(), $newPassword);
+        $account = $accountService->newPassword($account['apiKey'], $account['resetToken'], $newPassword);
 
         $this->assertNull($account);
     }

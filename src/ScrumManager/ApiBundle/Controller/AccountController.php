@@ -41,7 +41,7 @@ class AccountController extends Controller {
         $account = $this->get('account.service')->login($username, $password);
 
         if ($account) {
-            return $this->get('json.service')->sucessResponse($account->toSafeArray());
+            return $this->get('json.service')->sucessResponse($account);
         }
 
         return $this->get('json.service')->errorResponse(new ResponseAccountInvalidCredentials());
@@ -64,7 +64,7 @@ class AccountController extends Controller {
         $account = $this->get('account.service')->updateOne($apiKey, $requestData);
 
         if ($account) {
-            return $this->get('json.service')->sucessResponse($account->toSafeArray());
+            return $this->get('json.service')->sucessResponse($account);
         }
 
         return $this->get('json.service')->errorResponse(new ResponseAccountNotFound());
@@ -99,7 +99,7 @@ class AccountController extends Controller {
         $account = $this->get('account.service')->retrieveOne($username);
 
         if ($account) {
-            return $this->get('json.service')->sucessResponse($account->toSafeArray());
+            return $this->get('json.service')->sucessResponse($account);
         }
 
         return $this->get('json.service')->errorResponse(new ResponseAccountNotFound());
